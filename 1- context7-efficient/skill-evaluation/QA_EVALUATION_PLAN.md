@@ -1,10 +1,10 @@
-# QA Evaluation: context7-efficient Skill vs Direct Context7 MCP
+# QA Evaluation: fetch-library-docs Skill vs Direct Context7 MCP
 
 ## Evaluator Information
 - **Role**: Senior QA Engineer
 - **Experience**: 15+ years
 - **Date**: 2025-12-19
-- **Objective**: Compare efficiency and efficacy of context7-efficient skill against direct Context7 MCP integration
+- **Objective**: Compare efficiency and efficacy of fetch-library-docs skill against direct Context7 MCP integration
 
 ## Test Scenario Design
 
@@ -68,10 +68,10 @@ Implement a FastAPI endpoint with background task processing, database session m
 2. Document expected bugs and correct solutions
 3. Prepare evaluation environment
 
-### Phase 2: Test A - context7-efficient Skill
+### Phase 2: Test A - fetch-library-docs Skill
 1. Start fresh Claude Code session
 2. Present the buggy code
-3. Use context7-efficient skill to retrieve FastAPI documentation
+3. Use fetch-library-docs skill to retrieve FastAPI documentation
 4. Track all metrics
 5. Record final solution
 
@@ -91,11 +91,11 @@ Implement a FastAPI endpoint with background task processing, database session m
 ## Expected Outcomes
 
 ### Hypothesis
-Based on the context7-efficient design:
-- **context7-efficient** will use ~77% fewer tokens (205 vs 934 per query)
-- **context7-efficient** may require faster lookups due to shell pipeline efficiency
+Based on the fetch-library-docs design:
+- **fetch-library-docs** will use ~77% fewer tokens (205 vs 934 per query)
+- **fetch-library-docs** may require faster lookups due to shell pipeline efficiency
 - Both should produce correct solutions if properly used
-- context7-efficient may provide more focused, code-centric information
+- fetch-library-docs may provide more focused, code-centric information
 
 ### Success Criteria
 The evaluation will be considered complete when:
@@ -119,7 +119,7 @@ The evaluation will be considered complete when:
 ```markdown
 ## Test Results
 
-### Approach: [context7-efficient | Direct MCP]
+### Approach: [fetch-library-docs | Direct MCP]
 
 #### Metrics
 - Total Tokens: XXX
@@ -144,6 +144,6 @@ The evaluation will be considered complete when:
 
 ## Next Steps
 1. Create the buggy FastAPI code
-2. Execute Test A (context7-efficient)
+2. Execute Test A (fetch-library-docs)
 3. Execute Test B (Direct MCP)
 4. Compare and document results

@@ -1,11 +1,47 @@
 ---
-name: context7-efficient
-description: Token-efficient library documentation fetcher using Context7 MCP with 86.8% token savings through intelligent shell pipeline filtering. Fetches code examples, API references, and best practices for JavaScript, Python, Go, Rust, and other libraries. Use when users ask about library documentation, need code examples, want API usage patterns, are learning a new framework, need syntax reference, or troubleshooting with library-specific information. Triggers include questions like "Show me React hooks", "How do I use Prisma", "What's the Next.js routing syntax", or any request for library/framework documentation.
+name: fetch-library-docs
+description: Fetches library and framework documentation with code examples, API references, and best practices. Supports JavaScript, Python, Go, Rust, and other libraries. Use when users ask about library documentation, need code examples, want API usage patterns, are learning a new framework, need syntax reference, or troubleshooting with library-specific information. Triggers include questions like "Show me React hooks", "How do I use Prisma", "What's the Next.js routing syntax", "Get Express middleware docs", or any request for library/framework documentation. Achieves 86.8% token savings through intelligent filtering.
 ---
 
 # Context7 Efficient Documentation Fetcher
 
 Fetch library documentation with automatic 77% token reduction via shell pipeline.
+
+## API Key Setup (Required)
+
+Context7 now requires an API key for reliable access. Get your **free API key** at [context7.com/dashboard](https://context7.com/dashboard).
+
+### Setup Methods
+
+**Method 1: Config File** (Recommended - persistent)
+```bash
+# User-level (applies to all projects)
+echo "CONTEXT7_API_KEY=ctx7sk_your_key_here" > ~/.context7.env
+
+# Project-level (add to .gitignore!)
+echo "CONTEXT7_API_KEY=ctx7sk_your_key_here" > .context7.env
+```
+
+**Method 2: Environment Variable** (for CI/CD or temporary use)
+```bash
+# Windows (PowerShell)
+$env:CONTEXT7_API_KEY = "ctx7sk_your_key_here"
+
+# macOS/Linux
+export CONTEXT7_API_KEY="ctx7sk_your_key_here"
+```
+
+### Check API Key Status
+
+```bash
+bash scripts/fetch-docs.sh --api-status
+```
+
+### API Key Priority Order
+
+1. `CONTEXT7_API_KEY` environment variable (highest)
+2. `.context7.env` in current directory (project-level)
+3. `~/.context7.env` in home directory (user-level)
 
 ## Quick Start
 

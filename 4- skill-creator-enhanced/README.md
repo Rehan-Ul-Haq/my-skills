@@ -1,5 +1,7 @@
 # skill-creator-enhanced
 
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue)](CHANGELOG.md)
+
 Production-grade skill creation guide that scores 96/100 on skill-validator.
 
 ## Why Use This?

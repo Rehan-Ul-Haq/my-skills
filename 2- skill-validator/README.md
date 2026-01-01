@@ -1,5 +1,7 @@
 # skill-validator
 
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue)](CHANGELOG.md)
+
 Validate any skill against production-level quality criteria.
 
 ## Why Use This?

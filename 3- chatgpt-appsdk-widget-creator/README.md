@@ -1,5 +1,7 @@
 # chatgpt-widget-creator
 
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue)](CHANGELOG.md)
+
 Create production-grade widgets for ChatGPT Apps using OpenAI Apps SDK.
 
 ## Why Use This?

@@ -105,14 +105,14 @@
 4. **Direct MCP Access**: No intermediate processing
 
 ### Weaknesses
-1. **High Token Cost**: 16,287 tokens vs 2,153 tokens (context7-efficient)
+1. **High Token Cost**: 16,287 tokens vs 2,153 tokens (fetch-library-docs)
 2. **High Verbosity**: Significant duplication and repetition
 3. **Context Pollution**: All documentation goes into Claude's context window
 4. **Noise**: Many examples not directly relevant to the specific problem
 5. **Language Variations**: Same examples repeated in different language versions
 
 ### Comparison to Test A
-- **Token Overhead**: 7.6x more tokens than context7-efficient (16,287 vs 2,153)
+- **Token Overhead**: 7.6x more tokens than fetch-library-docs (16,287 vs 2,153)
 - **Time**: Faster (52s vs 88s) - likely due to fewer queries
 - **Quality**: Identical fixes achieved
 - **User Experience**: More information to parse through
@@ -134,4 +134,4 @@
 - **Actually Useful**: ~20% of content directly applicable
 
 ## Conclusion
-Direct Context7 MCP successfully retrieved comprehensive documentation enabling complete bug fixes, but at a significant token cost (7.6x higher than context7-efficient). While the information quality was excellent, the lack of filtering resulted in substantial context pollution.
+Direct Context7 MCP successfully retrieved comprehensive documentation enabling complete bug fixes, but at a significant token cost (7.6x higher than fetch-library-docs). While the information quality was excellent, the lack of filtering resulted in substantial context pollution.

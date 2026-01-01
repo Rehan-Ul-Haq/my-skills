@@ -1,7 +1,7 @@
 """
-Fixed FastAPI Endpoint - Based on context7-efficient Documentation
+Fixed FastAPI Endpoint - Based on fetch-library-docs Documentation
 
-All bugs fixed based on FastAPI documentation retrieved via context7-efficient skill:
+All bugs fixed based on FastAPI documentation retrieved via fetch-library-docs skill:
 1. ✅ Fixed async context manager usage with database sessions
 2. ✅ Fixed dependency scope handling
 3. ✅ Fixed background task parameter passing
@@ -36,7 +36,7 @@ class User(Base):
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """
     Fixed: Using async generator pattern with proper await on close()
-    Based on context7-efficient query 4: async database session dependency
+    Based on fetch-library-docs query 4: async database session dependency
     """
     async with async_session_maker() as session:
         try:
@@ -50,7 +50,7 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 async def lifespan(app: FastAPI):
     """
     Fixed: Using lifespan context manager pattern
-    Based on context7-efficient query 3: lifespan events
+    Based on fetch-library-docs query 3: lifespan events
 
     Documentation showed:
     - on_event is deprecated
@@ -71,7 +71,7 @@ app = FastAPI(lifespan=lifespan)
 async def send_email_notification(user_email: str, user_name: str):
     """
     Fixed: Now async and doesn't receive db session
-    Based on context7-efficient query 2: background tasks
+    Based on fetch-library-docs query 2: background tasks
 
     Background tasks should not depend on request-scoped dependencies.
     Pass only serializable data (strings, ints, etc.)
@@ -114,7 +114,7 @@ async def get_user_service(
 ) -> AsyncGenerator[UserService, None]:
     """
     Fixed: Using async generator pattern for proper lifecycle management
-    Based on context7-efficient query 1: dependencies
+    Based on fetch-library-docs query 1: dependencies
 
     This ensures the service is properly cleaned up after the request.
     """
@@ -172,7 +172,7 @@ if __name__ == "__main__":
 
 
 """
-FIXES SUMMARY (Based on context7-efficient documentation):
+FIXES SUMMARY (Based on fetch-library-docs documentation):
 
 1. Database Session Cleanup (Query 4: async database session dependency)
    - Changed get_db to use async with and proper await on close()
