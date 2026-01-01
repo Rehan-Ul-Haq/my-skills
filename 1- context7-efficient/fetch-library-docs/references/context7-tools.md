@@ -2,6 +2,10 @@
 
 *2 tools available*
 
+**⚠️ Context7 has a 3-call limit per question.** Plan your calls carefully:
+- Use `--library-id` when you know the ID (saves 1 call)
+- The fetch-docs.sh skill uses max 2 calls, leaving 1 for your retry
+
 ## `resolve-library-id`
 
 Resolves a package/product name to a Context7-compatible library ID and returns a list of matching libraries.
@@ -154,12 +158,17 @@ python scripts/mcp-client.py call -s "npx -y @upstash/context7-mcp" \
 For token-efficient documentation fetching:
 
 ```bash
-# Automatic resolution + filtering (77% token savings)
-bash scripts/fetch-docs.sh --library react --topic useState
+# Code examples (default, 60-70% token savings)
+bash scripts/fetch-docs.sh --library react --topic useState --content-type examples
 
-# With verbose output
-bash scripts/fetch-docs.sh --library react --topic useState --verbose
+# Multiple content types
+bash scripts/fetch-docs.sh --library react --topic useState --content-type examples,api-ref
+
+# With verbose output to see savings
+bash scripts/fetch-docs.sh --library react --topic useState --content-type examples --verbose
 ```
+
+**Content types available:** `examples`, `api-ref`, `setup`, `concepts`, `migration`, `troubleshooting`, `patterns`, `all`
 
 ## Common Library IDs
 
@@ -177,9 +186,87 @@ Quick reference for popular libraries:
 | FastAPI | `/tiangolo/fastapi` |
 | Django | `/django/docs` |
 
+## Error Handling
+
+### Error Codes
+
+| Error Code | Meaning | Call Cost | Action |
+|------------|---------|-----------|--------|
+| `[LIBRARY_NOT_FOUND]` | Library name didn't resolve | 1 call | Try spelling variations |
+| `[LIBRARY_MISMATCH]` | Resolved to wrong library | 1 call | Use --library-id directly |
+| `[INVALID_LIBRARY_ID]` | Bad ID format | 0 calls | Fix to `/org/project` format |
+| `[EMPTY_RESULTS]` | No docs for query | 1-2 calls | Broaden topic or --content-type all |
+| `[RATE_LIMIT_ERROR]` | Context7 limit hit | N/A | Wait, check API key |
+| `[FETCH_FAILED_AFTER_RETRIES]` | Network issues | 0 calls | Safe to retry |
+
+### Retry Logic
+
+- **Infrastructure failures** (timeout, network): Auto-retries with exponential backoff (2s, 5s, 10s)
+- **API errors** (rate limit, auth): No retry (would waste call budget)
+
+---
+
+## API Key Setup
+
+Required for reliable access. Get free key at [context7.com/dashboard](https://context7.com/dashboard).
+
+### Setup Methods
+
+**Method 1: Config File** (Recommended - persistent)
+```bash
+# User-level (applies to all projects)
+echo "CONTEXT7_API_KEY=ctx7sk_your_key" > ~/.context7.env
+
+# Project-level (add to .gitignore!)
+echo "CONTEXT7_API_KEY=ctx7sk_your_key" > .context7.env
+```
+
+**Method 2: Environment Variable**
+```bash
+# macOS/Linux
+export CONTEXT7_API_KEY="ctx7sk_your_key"
+
+# Windows (PowerShell)
+$env:CONTEXT7_API_KEY = "ctx7sk_your_key"
+```
+
+### Check Status
+
+```bash
+bash scripts/fetch-docs.sh --api-status
+```
+
+### Priority Order
+
+1. `CONTEXT7_API_KEY` environment variable (highest)
+2. `.context7.env` in current directory (project-level)
+3. `~/.context7.env` in home directory (user-level)
+
+---
+
+## Parameters Reference
+
+```bash
+bash scripts/fetch-docs.sh [OPTIONS]
+```
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `--library <name>` | One of these | Library name (uses 2 calls for resolution) |
+| `--library-id <id>` | required | Direct ID like `/vercel/next.js` (uses 1 call) |
+| `--topic <topic>` | Recommended | Feature to focus on |
+| `--content-type <types>` | Optional | Comma-separated: examples, api-ref, setup, concepts, migration, troubleshooting, patterns, all |
+| `--max-items <num>` | Optional | Max items per type (default: 5) |
+| `--verbose` | Optional | Show token savings stats |
+| `--api-status` | Optional | Check API key configuration |
+
+---
+
 ## Tips
 
-1. **Library Resolution**: Always use `resolve-library-id` first unless you have the exact ID
+1. **Save API Calls**: Use `--library-id` when you know the ID (saves 1 of your 3 calls)
 2. **Specific Queries**: More specific queries yield better results
-3. **Use Shell Pipeline**: `fetch-docs.sh` provides 77% token savings through filtering
-4. **Fallback**: If no results, try broader queries or different library name variations
+3. **Use Shell Pipeline**: `fetch-docs.sh` provides 60-90% token savings through content-type filtering
+4. **Match Content Type**: Use `examples` for code, `api-ref` for parameters, `setup` for installation
+5. **Combine Types**: Use comma-separated types like `examples,api-ref` for comprehensive output
+6. **Fallback**: If no results, try `--content-type all` or broader topics

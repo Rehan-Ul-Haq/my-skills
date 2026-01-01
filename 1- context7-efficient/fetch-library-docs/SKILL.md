@@ -1,237 +1,109 @@
 ---
 name: fetch-library-docs
-description: Fetches library and framework documentation with code examples, API references, and best practices. Supports JavaScript, Python, Go, Rust, and other libraries. Use when users ask about library documentation, need code examples, want API usage patterns, are learning a new framework, need syntax reference, or troubleshooting with library-specific information. Triggers include questions like "Show me React hooks", "How do I use Prisma", "What's the Next.js routing syntax", "Get Express middleware docs", or any request for library/framework documentation. Achieves 86.8% token savings through intelligent filtering.
+description: Fetches official documentation for external libraries and frameworks (React, Next.js, Prisma, FastAPI, Express, Tailwind, MongoDB, etc.) with 60-90% token savings via content-type filtering. Use this skill when implementing features using library APIs, debugging library-specific errors, troubleshooting configuration issues, installing or setting up frameworks, integrating third-party packages, upgrading between library versions, or looking up correct API patterns and best practices. Triggers automatically during coding work - fetch docs before writing library code to get correct patterns, not after guessing wrong.
 ---
 
-# Context7 Efficient Documentation Fetcher
+# Library Documentation Skill
 
-Fetch library documentation with automatic 77% token reduction via shell pipeline.
+Fetches official library documentation with 60-90% token savings.
 
-## API Key Setup (Required)
+---
 
-Context7 now requires an API key for reliable access. Get your **free API key** at [context7.com/dashboard](https://context7.com/dashboard).
+## WHEN TO INVOKE (Auto-Detection)
 
-### Setup Methods
+**INVOKE AUTOMATICALLY when:**
 
-**Method 1: Config File** (Recommended - persistent)
-```bash
-# User-level (applies to all projects)
-echo "CONTEXT7_API_KEY=ctx7sk_your_key_here" > ~/.context7.env
+| Context | Detection Signal | Content Type |
+|---------|------------------|--------------|
+| **Implementing** | About to write code using library API | `examples,api-ref` |
+| **Debugging** | Error contains library name (e.g., `PrismaClientError`) | `troubleshooting` |
+| **Installing** | Adding new package, `npm install`, setup task | `setup` |
+| **Integrating** | Connecting libraries ("use X with Y") | `examples,setup` |
+| **Upgrading** | Version migration, breaking changes | `migration` |
+| **Uncertain** | First use of library feature, unsure of pattern | `examples` |
 
-# Project-level (add to .gitignore!)
-echo "CONTEXT7_API_KEY=ctx7sk_your_key_here" > .context7.env
+**DO NOT INVOKE when:**
+- Already have sufficient knowledge from training
+- User pasted docs or has them open
+- Task is about local/private code (use codebase search)
+- Comparing libraries (use web search)
+
+---
+
+## DECISION LOGIC
+
+### 1. Identify Library
+
+```
+Priority: User mention → Error message → File imports → package.json → Ask user
 ```
 
-**Method 2: Environment Variable** (for CI/CD or temporary use)
-```bash
-# Windows (PowerShell)
-$env:CONTEXT7_API_KEY = "ctx7sk_your_key_here"
+Examples:
+- `PrismaClientKnownRequestError` → library = "prisma"
+- `import { useState } from 'react'` → library = "react"
+- `from fastapi import FastAPI` → library = "fastapi"
 
-# macOS/Linux
-export CONTEXT7_API_KEY="ctx7sk_your_key_here"
+### 2. Identify Topic
+
+```
+Priority: User specifies → Error message → Feature being implemented → "getting started"
 ```
 
-### Check API Key Status
+### 3. Select Content Type
+
+| Task | Content Type |
+|------|--------------|
+| Implementing code | `examples,api-ref` |
+| Debugging error | `troubleshooting,examples` |
+| Installing/setup | `setup` |
+| Integrating libs | `examples,setup` |
+| Upgrading version | `migration` |
+| Understanding why | `concepts` |
+| Best practices | `patterns` |
+
+---
+
+## EXECUTION
 
 ```bash
-bash scripts/fetch-docs.sh --api-status
+# With known library ID (faster - saves 1 API call)
+bash scripts/fetch-docs.sh --library-id <id> --topic "<topic>" --content-type <types>
+
+# With library name (auto-resolves)
+bash scripts/fetch-docs.sh --library <name> --topic "<topic>" --content-type <types>
 ```
 
-### API Key Priority Order
+### Quick Library IDs
 
-1. `CONTEXT7_API_KEY` environment variable (highest)
-2. `.context7.env` in current directory (project-level)
-3. `~/.context7.env` in home directory (user-level)
+| Library | ID |
+|---------|----|
+| React | `/reactjs/react.dev` |
+| Next.js | `/vercel/next.js` |
+| Prisma | `/prisma/docs` |
+| Tailwind | `/tailwindlabs/tailwindcss.com` |
+| FastAPI | `/tiangolo/fastapi` |
 
-## Quick Start
+See [references/library-ids.md](references/library-ids.md) for complete list.
 
-**Always use the token-efficient shell pipeline:**
+---
 
-```bash
-# Automatic library resolution + filtering
-bash scripts/fetch-docs.sh --library <library-name> --topic <topic>
+## ERROR HANDLING (Quick Reference)
 
-# Examples:
-bash scripts/fetch-docs.sh --library react --topic useState
-bash scripts/fetch-docs.sh --library nextjs --topic routing
-bash scripts/fetch-docs.sh --library prisma --topic queries
-```
+| Error | Action |
+|-------|--------|
+| `[LIBRARY_NOT_FOUND]` | Try spelling variations |
+| `[LIBRARY_MISMATCH]` | Use --library-id directly |
+| `[EMPTY_RESULTS]` | Broaden topic or use `--content-type all` |
+| `[RATE_LIMIT_ERROR]` | Check API key setup |
 
-**Result:** Returns ~205 tokens instead of ~934 tokens (77% savings).
+**Call Budget**: Context7 allows 3 calls/question. Use `--library-id` to save 1 call.
 
-## Standard Workflow
+See [references/context7-tools.md](references/context7-tools.md) for full error handling.
 
-For any documentation request, follow this workflow:
+---
 
-### 1. Identify Library and Topic
+## REFERENCES
 
-Extract from user query:
-- **Library:** React, Next.js, Prisma, Express, etc.
-- **Topic:** Specific feature (hooks, routing, queries, etc.)
-
-### 2. Fetch with Shell Pipeline
-
-```bash
-bash scripts/fetch-docs.sh --library <library> --topic <topic> --verbose
-```
-
-The `--verbose` flag shows token savings statistics.
-
-### 3. Use Filtered Output
-
-The script automatically:
-- Fetches full documentation (934 tokens, stays in subprocess)
-- Filters to code examples + API signatures + key notes
-- Returns only essential content (205 tokens to Claude)
-
-## Parameters
-
-### Basic Usage
-
-```bash
-bash scripts/fetch-docs.sh [OPTIONS]
-```
-
-**Required (pick one):**
-- `--library <name>` - Library name (e.g., "react", "nextjs")
-- `--library-id <id>` - Direct Context7 ID (faster, skips resolution)
-
-**Optional:**
-- `--topic <topic>` - Specific feature to focus on
-- `--mode <code|info>` - code for examples (default), info for concepts
-- `--page <1-10>` - Pagination for more results
-- `--verbose` - Show token savings statistics
-
-### Mode Selection
-
-**Code Mode (default):** Returns code examples + API signatures
-```bash
---mode code
-```
-
-**Info Mode:** Returns conceptual explanations + fewer examples
-```bash
---mode info
-```
-
-## Common Library IDs
-
-Use `--library-id` for faster lookup (skips resolution):
-
-```bash
-React:      /reactjs/react.dev
-Next.js:    /vercel/next.js
-Express:    /expressjs/express
-Prisma:     /prisma/docs
-MongoDB:    /mongodb/docs
-Fastify:    /fastify/fastify
-NestJS:     /nestjs/docs
-Vue.js:     /vuejs/docs
-Svelte:     /sveltejs/site
-```
-
-## Workflow Patterns
-
-### Pattern 1: Quick Code Examples
-
-User asks: "Show me React useState examples"
-
-```bash
-bash scripts/fetch-docs.sh --library react --topic useState --verbose
-```
-
-Returns: 5 code examples + API signatures + notes (~205 tokens)
-
-### Pattern 2: Learning New Library
-
-User asks: "How do I get started with Prisma?"
-
-```bash
-# Step 1: Get overview
-bash scripts/fetch-docs.sh --library prisma --topic "getting started" --mode info
-
-# Step 2: Get code examples
-bash scripts/fetch-docs.sh --library prisma --topic queries --mode code
-```
-
-### Pattern 3: Specific Feature Lookup
-
-User asks: "How does Next.js routing work?"
-
-```bash
-bash scripts/fetch-docs.sh --library-id /vercel/next.js --topic routing
-```
-
-Using `--library-id` is faster when you know the exact ID.
-
-### Pattern 4: Deep Exploration
-
-User needs comprehensive information:
-
-```bash
-# Page 1: Basic examples
-bash scripts/fetch-docs.sh --library react --topic hooks --page 1
-
-# Page 2: Advanced patterns
-bash scripts/fetch-docs.sh --library react --topic hooks --page 2
-```
-
-## Token Efficiency
-
-**How it works:**
-
-1. `fetch-docs.sh` calls `fetch-raw.sh` (which uses `mcp-client.py`)
-2. Full response (934 tokens) stays in subprocess memory
-3. Shell filters (awk/grep/sed) extract essentials (0 LLM tokens used)
-4. Returns filtered output (205 tokens) to Claude
-
-**Savings:**
-- Direct MCP: 934 tokens per query
-- This approach: 205 tokens per query
-- **77% reduction**
-
-**Do NOT use `mcp-client.py` directly** - it bypasses filtering and wastes tokens.
-
-## Advanced: Library Resolution
-
-If library name fails, try variations:
-
-```bash
-# Try different formats
---library "next.js"    # with dot
---library "nextjs"     # without dot
---library "next"       # short form
-
-# Or search manually
-bash scripts/fetch-docs.sh --library "your-library" --verbose
-# Check output for suggested library IDs
-```
-
-## Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| Library not found | Try name variations or use broader search term |
-| No results | Use `--mode info` or broader topic |
-| Need more examples | Increase page: `--page 2` |
-| Want full context | Use `--mode info` for explanations |
-
-## References
-
-For detailed Context7 MCP tool documentation, see:
-- [references/context7-tools.md](references/context7-tools.md) - Complete tool reference
-
-## Implementation Notes
-
-**Components (for reference only, use fetch-docs.sh):**
-- `mcp-client.py` - Universal MCP client (foundation)
-- `fetch-raw.sh` - MCP wrapper
-- `extract-code-blocks.sh` - Code example filter (awk)
-- `extract-signatures.sh` - API signature filter (awk)
-- `extract-notes.sh` - Important notes filter (grep)
-- `fetch-docs.sh` - **Main orchestrator (ALWAYS USE THIS)**
-
-**Architecture:**
-Shell pipeline processes documentation in subprocess, keeping full response out of Claude's context. Only filtered essentials enter the LLM context, achieving 77% token savings with 100% functionality preserved.
-
-Based on [Anthropic's "Code Execution with MCP" blog post](https://www.anthropic.com/engineering/code-execution-with-mcp).
+- [Library IDs](references/library-ids.md) - Complete library ID list
+- [Usage Patterns](references/patterns.md) - Real-world examples
+- [Context7 Tools](references/context7-tools.md) - API details, error codes, setup

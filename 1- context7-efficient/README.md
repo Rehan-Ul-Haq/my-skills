@@ -1,404 +1,208 @@
-# 📚 fetch-library-docs: 86.8% Token Reduction for Library Documentation
+# fetch-library-docs: 60-90% Token Reduction for Library Documentation
 
-**Get instant code examples with 86.8% fewer tokens using intelligent Context7 filtering.**
+**Proactively fetch official library docs with intelligent content-type filtering.**
 
-[![Version](https://img.shields.io/badge/Version-1.0.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-2.0.1-blue)](CHANGELOG.md)
 [![MCP Protocol](https://img.shields.io/badge/MCP-Context7-blue)](https://modelcontextprotocol.io/)
-[![Token Savings](https://img.shields.io/badge/Token%20Savings-86.8%25-success)](.)
+[![Token Savings](https://img.shields.io/badge/Token%20Savings-60--90%25-success)](.claude/skills/fetch-library-docs)
 [![Architecture](https://img.shields.io/badge/Architecture-Shell%20Pipeline-orange)](https://www.anthropic.com/engineering/code-execution-with-mcp)
 
-> **Note**: This skill was previously named `context7-efficient`. It has been renamed to `fetch-library-docs` for better AI agent discoverability following [tool naming best practices](https://tetrate.io/learn/ai/llm-function-calling-guide).
+---
+
+## What's New in v2.0.0
+
+- **Auto-invocation**: Skill triggers automatically when implementing, debugging, installing, integrating, or upgrading
+- **Content-type filtering**: Request exactly what you need (examples, api-ref, setup, troubleshooting, migration, patterns)
+- **Call budget awareness**: Respects Context7's 3-call limit per question
+- **Progressive disclosure**: Concise SKILL.md with detailed references
 
 ---
 
-## 🔑 API Key Setup (Required)
+## The Problem
 
-Context7 now requires an API key for reliable access. Without an API key, you'll experience low rate limits or blocked requests.
+**Context Bloat:** Fetching documentation consumes excessive tokens. A simple query returns everything when you only need specific content.
 
-### Get Your Free API Key
+**Reactive Approach:** Traditional skills wait for users to ask—but developers often guess at APIs first, then look up docs after errors.
 
-1. Visit **[context7.com/dashboard](https://context7.com/dashboard)**
-2. Sign up or log in
-3. Copy your API key (starts with `ctx7sk_`)
+---
 
-### Setup Methods (Choose One)
+## The Solution
 
-#### Method 1: Environment Variable (Advanced Users / CI/CD)
+**Proactive + Filtered Documentation Fetching:**
 
-Best for automation, CI/CD pipelines, or temporary use.
+1. **Auto-detect** when docs are needed (implementing, debugging, installing)
+2. **Fetch** from Context7 MCP (stays in subprocess)
+3. **Filter** by content type (examples, api-ref, setup, etc.)
+4. **Return** only what's needed (60-90% token savings)
 
-**Windows (PowerShell):**
-```powershell
-# Temporary (current session only)
-$env:CONTEXT7_API_KEY = "ctx7sk_your_api_key_here"
+**Core Principle:** "Fetch docs BEFORE writing code, not after guessing wrong."
 
-# Permanent (persists across sessions)
-[Environment]::SetEnvironmentVariable("CONTEXT7_API_KEY", "ctx7sk_your_api_key_here", "User")
-```
+---
 
-**Windows (Command Prompt):**
-```cmd
-# Permanent
-setx CONTEXT7_API_KEY "ctx7sk_your_api_key_here"
-```
+## Token Savings by Content Type
 
-**macOS/Linux:**
-```bash
-# Temporary (current session)
-export CONTEXT7_API_KEY="ctx7sk_your_api_key_here"
+| Content Type | What It Extracts | Typical Savings |
+|--------------|------------------|-----------------|
+| `examples` | Code blocks | 60-70% |
+| `api-ref` | Signatures, parameters | 70-80% |
+| `setup` | Terminal commands | 80-90% |
+| `troubleshooting` | Fixes, workarounds | 60-70% |
+| `migration` | Breaking changes, upgrades | 60-70% |
+| `patterns` | Best practices | 60-70% |
+| `all` | Everything (no filter) | 0% |
 
-# Permanent (add to shell profile)
-echo 'export CONTEXT7_API_KEY="ctx7sk_your_api_key_here"' >> ~/.bashrc
-# or for zsh:
-echo 'export CONTEXT7_API_KEY="ctx7sk_your_api_key_here"' >> ~/.zshrc
+---
 
-# Reload shell
-source ~/.bashrc  # or source ~/.zshrc
-```
+## Auto-Invocation
 
-#### Method 2: Config File (Recommended for Personal Use)
+The skill **automatically triggers** based on context—no need to explicitly ask for docs:
 
-**User-level config** (applies to all projects):
-```bash
-# Create config file in home directory
-echo "CONTEXT7_API_KEY=ctx7sk_your_api_key_here" > ~/.context7.env
+| Context | Detection Signal | Content Type |
+|---------|------------------|--------------|
+| **Implementing** | Writing code using library API | `examples,api-ref` |
+| **Debugging** | Error contains library name | `troubleshooting` |
+| **Installing** | Adding new package | `setup` |
+| **Integrating** | Connecting libraries | `examples,setup` |
+| **Upgrading** | Version migration | `migration` |
 
-# On Linux/macOS, restrict permissions
-chmod 600 ~/.context7.env
-```
+---
 
-**Project-level config** (team-specific key):
-```bash
-# Create config file in project root
-echo "CONTEXT7_API_KEY=ctx7sk_your_api_key_here" > .context7.env
+## Quick Start
 
-# IMPORTANT: Add to .gitignore to keep it private!
-echo ".context7.env" >> .gitignore
-```
-
-### Check Your API Key Status
+### 1. Get API Key (Required)
 
 ```bash
-# Check if API key is configured
-bash scripts/fetch-docs.sh --api-status
-
-# Or run with verbose to see API key status
-bash scripts/fetch-docs.sh --library react --topic hooks --verbose
+# Get free key at context7.com/dashboard
+echo "CONTEXT7_API_KEY=ctx7sk_your_key" > ~/.context7.env
 ```
 
-### API Key Priority Order
+### 2. Usage
 
-When multiple sources are configured, the skill uses this priority:
+**Automatic (Recommended):**
 
-| Priority | Source | Best For |
-|----------|--------|----------|
-| 1 (Highest) | `CONTEXT7_API_KEY` environment variable | CI/CD, temporary override |
-| 2 | `.context7.env` in current directory | Project-specific keys |
-| 3 | `~/.context7.env` in home directory | Personal default |
-| 4 (Fallback) | No key (low rate limits) | Testing only |
+Just work normally—the skill auto-invokes when needed:
+- Writing React component → fetches hook examples
+- Seeing Prisma error → fetches troubleshooting docs
+- Adding Tailwind → fetches setup commands
 
-### Troubleshooting API Key Issues
+**Explicit:**
 
-| Issue | Solution |
-|-------|----------|
-| "Rate limit exceeded" | Get API key at context7.com/dashboard |
-| Key not detected | Run `--api-status` to check configuration |
-| Wrong key source | Check priority order above |
-| Team needs shared key | Use project-level `.context7.env` |
+```bash
+# Code examples (default)
+bash scripts/fetch-docs.sh --library react --topic useState --content-type examples
 
----
+# API reference
+bash scripts/fetch-docs.sh --library-id /vercel/next.js --topic routing --content-type api-ref
 
-## 🎯 The Problem
+# Setup/installation
+bash scripts/fetch-docs.sh --library tailwind --topic "installation next.js" --content-type setup
 
-**Context Bloat:** Fetching documentation consumes excessive tokens. A simple query like "Show me React useState examples" returns 934 tokens when you only need ~200 tokens of actual code.
+# Troubleshooting
+bash scripts/fetch-docs.sh --library prisma --topic "unique constraint error" --content-type troubleshooting
 
-**Token Waste:**
-- Direct MCP call → 934 tokens per query
-- Most content is verbose explanations you don't need
-- 78% of response is wasted tokens
+# Version migration
+bash scripts/fetch-docs.sh --library nextjs --topic "upgrade 14 to 15" --content-type migration
+```
 
-**Developer Pain:** Switching to browser, searching docs, finding examples = 5-10 minutes wasted per lookup.
+## Call Budget Management
 
----
+**Context7 has a 3-call limit per question.** This skill is designed to respect that:
 
-## ✨ The Solution
-
-Shell pipeline that filters MCP responses **before** they enter Claude's context:
-
-1. Fetch documentation → 934 tokens (stays in subprocess ✅)
-2. Filter with grep/awk → 0 LLM tokens for processing ✅
-3. Return essentials → 205 tokens to Claude ✅
-
-**Result:** 77% average token savings
-
-Implements the architecture from [Anthropic's "Code Execution with MCP" blog post](https://www.anthropic.com/engineering/code-execution-with-mcp).
+| Strategy | Calls Used | Remaining |
+|----------|------------|-----------|
+| `--library-id` (known ID) | 1 | 2 for retries |
+| `--library` (needs resolution) | 2 | 1 for retry |
 
 ---
 
-## 📊 Proven Results
+## Error Handling
 
-### Simple Query Examples
+| Error Code | Meaning | Action |
+|------------|---------|--------|
+| `[LIBRARY_NOT_FOUND]` | Name didn't resolve | Try spelling variations |
+| `[LIBRARY_MISMATCH]` | Resolved to wrong library | Use --library-id directly |
+| `[CONTENT_TYPE_EMPTY]` | Filter found no matching content | Auto-fallback to `all` (v2.0.1+) |
+| `[EMPTY_RESULTS]` | No docs for topic | Broaden topic or use --content-type all |
+| `[RATE_LIMIT_ERROR]` | Context7 limit hit | Check API key |
 
-| Query | Direct MCP | This Skill | Tokens Saved | Savings % |
-|-------|-----------|------------|--------------|-----------|
-| React useState | 934 | 205 | 729 | **78%** |
-| Next.js routing | 1,245 | 287 | 958 | **77%** |
-| Prisma queries | 1,089 | 256 | 833 | **76%** |
-| Express middleware | 876 | 198 | 678 | **77%** |
+**Auto-Fallback (v2.0.1+):**
+- When content-type filtering returns empty, skill automatically retries with `--content-type all`
+- No extra API calls used (fallback uses same raw response)
+- Verbose mode shows: `[INFO] No content found for 'migration', auto-retrying with 'all'...`
 
-**Average: 77% token savings**
-
-### Real-World Complex Scenario (QA Evaluation)
-
-**Scenario**: Fixing 8 bugs in FastAPI application requiring multiple documentation lookups
-
-| Metric | Direct MCP | fetch-library-docs | Improvement |
-|--------|-----------|--------------|-------------|
-| Total tokens | 16,287 | 2,153 | **86.8% savings** |
-| Bugs fixed | 8/8 ✅ | 8/8 ✅ | Identical quality |
-| Useful content | ~20% | ~85% | **4.25x better** |
-
-### Monthly Impact
-
-**Estimated usage** (20 queries/day):
-- Direct MCP: ~560,400 tokens
-- This skill: ~123,000 tokens
-- **Saved: 437,400 tokens/month**
-
-**Overhead:** ~22 seconds per query for 86.8% savings ✅
+**Retry Logic:**
+- Infrastructure failures (timeout, network): Auto-retries with 2s, 5s, 10s backoff
+- API errors (rate limit, auth): No retry (would waste call budget)
 
 ---
 
-## 🏗️ How It Works
-
-### Execution Flow
+## Architecture
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│ User asks Claude: "Show me React useState examples"     │
+│ Auto-Detection: Implementing? Debugging? Installing?     │
 └────────────────────┬─────────────────────────────────────┘
                      │
                      ▼
 ┌──────────────────────────────────────────────────────────┐
-│ Claude automatically runs:                               │
-│ bash scripts/fetch-docs.sh --library react --topic useState │
+│ Decision Logic:                                          │
+│ ├─ Identify library (from context/imports/errors)       │
+│ ├─ Identify topic (from task/error message)             │
+│ └─ Select content-type (from task type)                 │
 └────────────────────┬─────────────────────────────────────┘
                      │
                      ▼
 ┌──────────────────────────────────────────────────────────┐
-│ fetch-docs.sh (Orchestrator)                             │
-│ ├─ Resolves library name to ID                          │
-│ └─ Calls fetch-raw.sh                                   │
+│ fetch-docs.sh --library X --topic Y --content-type Z    │
 └────────────────────┬─────────────────────────────────────┘
                      │
                      ▼
 ┌──────────────────────────────────────────────────────────┐
-│ fetch-raw.sh (MCP Wrapper)                               │
-│ Calls: python3 mcp-client.py call \                     │
-│          -s "npx -y @upstash/context7-mcp" \             │
-│          -t get-library-docs \                            │
-│          -p '{"context7CompatibleLibraryID": ...}'       │
+│ Context7 MCP (subprocess - tokens stay here)            │
+│ ├─ resolve-library-id (if needed)                       │
+│ └─ query-docs                                           │
 └────────────────────┬─────────────────────────────────────┘
                      │
                      ▼
 ┌──────────────────────────────────────────────────────────┐
-│ mcp-client.py (Universal MCP Client)                     │
-│ ├─ Spawns: npx -y @upstash/context7-mcp                 │
-│ ├─ Communicates via stdio (JSON-RPC)                    │
-│ └─ Returns: 934 tokens (stays in subprocess!)           │
+│ Content-Type Filtering (shell pipeline - 0 LLM tokens)  │
+│ ├─ filter-by-type.sh routes to extractor               │
+│ └─ extract-*.sh filters by content type                │
 └────────────────────┬─────────────────────────────────────┘
                      │
                      ▼
 ┌──────────────────────────────────────────────────────────┐
-│ fetch-docs.sh receives RAW_JSON (934 tokens)             │
-│ ├─ Pipes through: extract-code-blocks.sh (awk)          │
-│ ├─ Pipes through: extract-signatures.sh (awk)           │
-│ ├─ Pipes through: extract-notes.sh (grep)               │
-│ └─ Returns: 205 tokens to Claude                        │
+│ Return filtered content (60-90% token savings)          │
 └──────────────────────────────────────────────────────────┘
-
-Token savings: 729 tokens (78%) ✅
-```
-
-### Key Innovation: Subprocess Isolation
-
-The **934-token response never enters Claude's context**:
-
-1. **Subprocess execution**: mcp-client.py runs in separate process
-2. **In-memory processing**: MCP response stays in subprocess memory
-3. **Zero-token filtering**: awk/grep/sed process text (0 LLM tokens!)
-4. **Selective return**: Only 205 filtered tokens go to Claude
-
-**Components:**
-- **mcp-client.py**: Universal MCP client (foundation)
-- **fetch-raw.sh**: Wrapper for MCP calls
-- **extract-*.sh**: Filtering scripts (awk/grep/sed)
-- **fetch-docs.sh**: Orchestrator
-
----
-
-## 🔬 Comprehensive QA Evaluation
-
-**Independent evaluation by Senior QA Engineer (15+ years experience)**
-
-### Test Scenario
-Complex FastAPI application with 8 subtle bugs requiring library documentation:
-- Async context managers
-- Deprecated lifecycle events
-- Background task dependencies
-- Error handling patterns
-
-### Results Summary
-
-| Metric | fetch-library-docs | Direct MCP | Advantage |
-|--------|--------------|------------|-----------|
-| **Token Efficiency** | 2,153 tokens | 16,287 tokens | **86.8% savings** |
-| **Time** | 88 seconds | 52 seconds | 40% slower |
-| **Bugs Fixed** | 8/8 ✅ | 8/8 ✅ | **Identical quality** |
-| **Signal-to-Noise** | ~85% useful | ~20% useful | **4.25x better** |
-| **Context Preserved** | 14,134 tokens | 0 tokens | **7.6x better** |
-| **Queries Possible** | ~37 queries | ~6 queries | **6x more** |
-
-### Key Findings
-
-✅ **Identical solution quality** at 86.8% lower token cost
-✅ **Better signal-to-noise ratio** (85% vs 20% useful content)
-✅ **6x more documentation queries** possible within context budget
-✅ **High-precision filtering** keeps only code examples + signatures + notes
-
-**Recommendation**: fetch-library-docs is the superior choice for typical Claude Code workflows. Token efficiency gains (7.6x improvement) far outweigh the time cost (40% slower).
-
-📊 **[Read Full QA Evaluation Report](../../../skill-evaluation/QA_EVALUATION_REPORT.md)** - Comprehensive comparison with detailed metrics, test code, and recommendations
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-1. **Get your API key** (free): [context7.com/dashboard](https://context7.com/dashboard)
-2. **Setup your API key** (one-time):
-   ```bash
-   # Save to config file
-   echo "CONTEXT7_API_KEY=ctx7sk_your_key_here" > ~/.context7.env
-   ```
-
-### Usage
-
-#### Automatic (Recommended)
-
-Just ask Claude about any library:
-
-```
-"Show me React useState examples"
-"How do I use Next.js routing?"
-"What's the Prisma query syntax?"
-```
-
-Claude automatically uses this skill with 77% token savings!
-
-#### Manual Testing
-
-```bash
-cd ~/.claude/skills/fetch-library-docs
-
-# Check API key status
-bash scripts/fetch-docs.sh --api-status
-
-# Basic usage
-bash scripts/fetch-docs.sh --library react --topic useState
-
-# With statistics (shows API key status too)
-bash scripts/fetch-docs.sh --library react --topic useState --verbose
-# Shows: API Key: configured (user config)
-#        Raw response: ~934 tokens
-#        Filtered output: ~205 tokens
-#        Token savings: 78%
-```
-
-### Common Library IDs
-
-```bash
-React:     /reactjs/react.dev
-Next.js:   /vercel/next.js
-Express:   /expressjs/express
-Prisma:    /prisma/docs
-MongoDB:   /mongodb/docs
 ```
 
 ---
 
-## 📚 Documentation
+## Documentation
 
-- **[SKILL.md](SKILL.md)** - Technical reference
-- **[TOKEN-SAVINGS-ARCHITECTURE.md](TOKEN-SAVINGS-ARCHITECTURE.md)** - Architecture details
-- **[SHELL-PIPELINE-SOLUTION.md](../../SHELL-PIPELINE-SOLUTION.md)** - Complete solution guide
-- **[QA Evaluation Report](../../../skill-evaluation/QA_EVALUATION_REPORT.md)** - Comprehensive QA evaluation and comparison
-
----
-
-## 🔗 References
-
-### Anthropic's MCP Blog
-
-**["Code Execution with MCP"](https://www.anthropic.com/engineering/code-execution-with-mcp)**
-
-Key patterns implemented:
-- ✅ Subprocess isolation for MCP responses
-- ✅ Zero-token processing with native tools
-- ✅ Selective data return to LLM context
-
-### MCP Protocol
-
-- **[Model Context Protocol](https://modelcontextprotocol.io/)** - Official spec
-- **[Context7 MCP Server](https://www.npmjs.com/package/@upstash/context7-mcp)** - Documentation provider
+- **[SKILL.md](.claude/skills/fetch-library-docs/SKILL.md)** - Core decision logic (~110 lines)
+- **[references/library-ids.md](.claude/skills/fetch-library-docs/references/library-ids.md)** - Complete library ID list
+- **[references/patterns.md](.claude/skills/fetch-library-docs/references/patterns.md)** - Usage patterns
+- **[references/context7-tools.md](.claude/skills/fetch-library-docs/references/context7-tools.md)** - API details, errors, setup
 
 ---
 
-## 🚨 Troubleshooting
+## Bottom Line
 
-### API Key Issues
-
-| Issue | Solution |
-|-------|----------|
-| "Rate limit exceeded" | Get free API key at [context7.com/dashboard](https://context7.com/dashboard) |
-| "Too many requests" (429) | API key not configured or rate limit hit |
-| Key not working | Check status with `bash scripts/fetch-docs.sh --api-status` |
-| Need project-specific key | Use `.context7.env` in project root |
-
-### General Issues
-
-| Issue | Solution |
-|-------|----------|
-| "npx: command not found" | Install Node.js: `sudo apt-get install nodejs npm` |
-| Library not found | Try variations: "next.js" → "nextjs" |
-| No results | Try broader topic or `--mode info` |
-| Need more results | Use `--page 2` for pagination |
-
----
-
-## 🏆 Bottom Line
-
-**Problem:** Documentation lookups waste tokens and time
-
-**Solution:** Shell pipeline filters MCP responses before reaching Claude
-
-**Results:**
-- ✅ 77% average token savings
-- ✅ 100% functionality preserved
-- ✅ 300ms processing overhead
-- ✅ 437,400 tokens saved monthly
+| Aspect | Old Approach | fetch-library-docs v2 |
+|--------|--------------|----------------------|
+| **Triggering** | Wait for user to ask | Auto-detect context |
+| **Filtering** | Generic extraction | Content-type specific |
+| **Token Savings** | Fixed ~77% | 60-90% (varies by type) |
+| **Call Budget** | Not managed | Respects 3-call limit |
+| **Error Recovery** | Basic | Validation + exponential backoff |
 
 **Use when:**
-- You need library documentation
-- You want code examples
-- You're learning a new API
-- You care about token efficiency
-
-**Impact:**
-- Time: 5 minutes → 10 seconds per lookup
-- Tokens: 934 → 205 per query (78% savings)
-- Cost: Significantly reduced monthly spend
+- Implementing features with external libraries
+- Debugging library-specific errors
+- Installing or configuring frameworks
+- Integrating libraries together
+- Upgrading between versions
 
 ---
 
