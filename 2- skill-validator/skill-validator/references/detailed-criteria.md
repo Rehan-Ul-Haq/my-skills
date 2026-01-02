@@ -20,19 +20,22 @@ Deep evaluation guidance for each criterion.
 
 ### 1.3 Frontmatter Quality
 
-**Score 3** - Complete and triggerable:
+**Score 3** - Complete, triggerable, proper format:
 ```yaml
 ---
-name: skill-name
-description: Clear action + when to use + key capabilities. Triggers on specific phrases.
+name: skill-name  # lowercase, hyphens, ≤64 chars, matches directory
+description: |    # ≤1024 chars, third-person style
+  This skill creates X and validates Y.
+  This skill should be used when users need to build widgets,
+  generate reports, or process data.
 ---
 ```
 
-**Score 2** - Present but weak:
+**Score 2** - Present but format issues:
 ```yaml
 ---
 name: skill-name
-description: Does something with X
+description: Creates X. Use when doing Y.  # Not third-person
 ---
 ```
 
@@ -46,7 +49,46 @@ description: X skill
 
 **Score 0**: Missing frontmatter
 
-### 1.4 No Extraneous Files
+### 1.4 Name Constraints
+
+**Score 3**: All constraints met
+- Lowercase letters only
+- Numbers allowed
+- Hyphens for separation
+- ≤64 characters
+- Matches directory name exactly
+
+**Score 2**: Minor violation (e.g., slightly over 64 chars)
+
+**Score 1**: Multiple violations (e.g., uppercase, underscores)
+
+**Score 0**: Name missing or completely invalid
+
+### 1.5 Description Format
+
+**Score 3** - [What] + [When] + Third-person:
+```yaml
+description: |
+  Validates skills against production criteria.
+  This skill should be used when reviewing, auditing, or
+  improving skills to ensure quality standards.
+```
+
+**Score 2** - Has content but wrong style:
+```yaml
+description: |
+  Validate skills against criteria.
+  Use when reviewing skills.  # Not third-person
+```
+
+**Score 1** - Vague:
+```yaml
+description: Helps with skill stuff
+```
+
+**Score 0**: Missing or single word
+
+### 1.6 No Extraneous Files
 
 **Should NOT exist in skill directory**:
 - README.md (SKILL.md IS the readme)
@@ -57,7 +99,7 @@ description: X skill
 
 **Exception**: `assets/`, `references/`, `scripts/` directories are expected.
 
-### 1.5 Progressive Disclosure
+### 1.7 Progressive Disclosure
 
 **Score 3**:
 - SKILL.md has overview + quick reference
@@ -352,3 +394,208 @@ references/
 5. Examples
 
 **Score 1**: Scattered organization, hard to navigate
+
+---
+
+## 8. Zero-Shot Implementation
+
+Skills should enable single-interaction implementation with embedded expertise.
+
+### 8.1 Before Implementation Section
+
+**Score 3** - Complete context gathering:
+```markdown
+## Before Implementation
+
+Gather context to ensure successful implementation:
+
+| Source | Gather |
+|--------|--------|
+| **Codebase** | Existing structure, patterns, conventions |
+| **Conversation** | User's specific requirements |
+| **Skill References** | Domain patterns from `references/` |
+| **User Guidelines** | Project-specific conventions |
+
+Ensure all required context is gathered before implementing.
+```
+
+**Score 2**: Mentions gathering context but incomplete sources
+
+**Score 1**: Brief "check context first" note
+
+**Score 0**: No context gathering guidance
+
+### 8.2 Embedded Expertise
+
+**Score 3** - Domain knowledge IN the skill:
+- Best practices documented in `references/`
+- Code examples included
+- Anti-patterns listed
+- Library/API documentation embedded
+
+**Score 2**: Some expertise embedded, some requires runtime discovery
+
+**Score 1**: Mostly relies on runtime discovery ("search for..." instructions)
+
+**Score 0**: No embedded domain expertise
+
+**Red flags**:
+- "Research the domain..."
+- "Fetch documentation for..."
+- "Discover best practices..."
+
+These indicate runtime discovery instead of embedded expertise.
+
+### 8.3 User-Only Questions
+
+**Score 3** - Only asks about USER's context:
+```markdown
+| Ask | Don't Ask |
+|-----|-----------|
+| "What's YOUR use case?" | "What is [technology]?" |
+| "What's YOUR tech stack?" | "What options exist?" |
+| "Specific constraints?" | "What are best practices?" |
+```
+
+**Score 2**: Mostly user questions, some domain questions
+
+**Score 1**: Mixes user and domain questions
+
+**Score 0**: Asks user for domain knowledge skill should contain
+
+---
+
+## 9. Reusability
+
+Skills should handle variations, not single requirements.
+
+### 9.1 Handles Variations
+
+**Score 3** - Explicitly adaptable:
+```markdown
+This skill adapts to:
+- Different data shapes
+- Multiple output formats
+- Various libraries/frameworks
+```
+
+**Score 2**: Some variability but limited
+
+**Score 1**: Works for narrow range of cases
+
+**Score 0**: Hardcoded to single requirement
+
+### 9.2 Variable vs Constant Analysis
+
+**Score 3** - Clear separation:
+```markdown
+## What VARIES (ask user)
+- Data shape/structure
+- Tool/library preference
+- Output format
+
+## What's CONSTANT (encoded in skill)
+- Best practices
+- Error handling patterns
+- Security requirements
+```
+
+**Score 2**: Implicit separation
+
+**Score 1**: Mixed without clear distinction
+
+**Score 0**: No consideration of variability
+
+### 9.3 Not Requirement-Specific
+
+**Score 3** - Generic within domain:
+```markdown
+# Good: "Create visualizations"
+Adapts to chart type, library, data shape
+
+# Good: "Deploy applications"
+Adapts to platform, orchestration, environment
+```
+
+**Score 0** - Too specific:
+```markdown
+# Bad: "Create bar chart with sales data using Recharts"
+# Bad: "Deploy to AWS EKS with Helm"
+```
+
+### 9.4 Abstraction Level
+
+| Level | Description | Score |
+|-------|-------------|-------|
+| Domain-agnostic | Works across domains | 3 |
+| Domain-specific, tool-agnostic | Within domain, any tool | 3 |
+| Tool-specific, workflow-agnostic | Specific tool, flexible workflow | 2 |
+| Requirement-specific | Single use case | 0 |
+
+---
+
+## 10. Type-Specific Criteria
+
+### 10.1 Builder Skills
+
+Must have ALL of:
+- [ ] Required Clarifications section
+- [ ] Output Specification
+- [ ] Domain Standards (Must Follow / Must Avoid)
+- [ ] Output Checklist
+
+**Score 3**: All present and detailed
+**Score 2**: All present, some minimal
+**Score 1**: Missing 1-2 elements
+**Score 0**: Missing 3+ elements
+
+### 10.2 Guide Skills
+
+Must have ALL of:
+- [ ] Workflow Steps (numbered, sequential)
+- [ ] Good/Bad Examples
+- [ ] Official Documentation links
+
+**Score 3**: All present with clear examples
+**Score 2**: All present, examples minimal
+**Score 1**: Missing 1 element
+**Score 0**: Missing 2+ elements
+
+### 10.3 Automation Skills
+
+Must have ALL of:
+- [ ] Scripts in `scripts/` directory
+- [ ] Dependencies documented
+- [ ] Error Handling guidance
+- [ ] Input/Output Specification
+
+**Score 3**: All present, scripts tested
+**Score 2**: All present, minimal documentation
+**Score 1**: Missing 1-2 elements
+**Score 0**: Missing 3+ elements or no scripts
+
+### 10.4 Analyzer Skills
+
+Must have ALL of:
+- [ ] Analysis Scope (what to analyze, what to ignore)
+- [ ] Evaluation Criteria
+- [ ] Output Format specification
+- [ ] Synthesis guidance
+
+**Score 3**: All present with clear criteria
+**Score 2**: All present, criteria vague
+**Score 1**: Missing 1-2 elements
+**Score 0**: Missing 3+ elements
+
+### 10.5 Validator Skills
+
+Must have ALL of:
+- [ ] Quality Criteria with weights
+- [ ] Scoring Rubric (0-3 or similar)
+- [ ] Pass/Fail Thresholds
+- [ ] Remediation guidance
+
+**Score 3**: All present with clear thresholds
+**Score 2**: All present, thresholds vague
+**Score 1**: Missing 1-2 elements
+**Score 0**: Missing 3+ elements

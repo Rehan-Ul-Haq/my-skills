@@ -1,0 +1,10 @@
+type Query {
+  # Add your queries here
+  hello: String
+}
+
+type Mutation {
+  # Add your mutations here
+}
+
+# Define your types here

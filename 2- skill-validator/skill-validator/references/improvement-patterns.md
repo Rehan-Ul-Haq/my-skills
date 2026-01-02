@@ -367,26 +367,294 @@ Use configured port (default: 3000).
 
 ---
 
+## Zero-Shot Implementation Issues
+
+### Problem: Runtime Discovery Instead of Embedded Expertise
+
+**Before (Bad)**:
+```markdown
+## Implementation
+1. Research the domain best practices
+2. Fetch library documentation
+3. Discover common patterns
+4. Implement based on findings
+```
+
+**After (Good)**:
+```markdown
+## Before Implementation
+
+Gather context to ensure successful implementation:
+
+| Source | Gather |
+|--------|--------|
+| **Codebase** | Existing structure, patterns, conventions |
+| **Conversation** | User's specific requirements |
+| **Skill References** | Domain patterns from `references/` |
+| **User Guidelines** | Project-specific conventions |
+
+## Implementation
+1. Apply patterns from `references/best-practices.md`
+2. Follow examples in `references/examples.md`
+3. Avoid anti-patterns in `references/anti-patterns.md`
+```
+
+### Problem: Asking User for Domain Knowledge
+
+**Before (Bad)**:
+```markdown
+## Clarifications
+1. What is Kafka and how does it work?
+2. What are Kafka best practices?
+3. What libraries are available?
+```
+
+**After (Good)**:
+```markdown
+## Required Clarifications
+
+Ask about USER's context (domain expertise is in this skill):
+
+1. **Use case**: "What's YOUR specific use case?"
+2. **Tech stack**: "What's YOUR environment?"
+3. **Constraints**: "Any specific requirements?"
+
+Note: Domain best practices are embedded in `references/`.
+```
+
+### Problem: No Context Gathering Guidance
+
+**Fix**: Add Before Implementation section:
+
+```markdown
+## Before Implementation
+
+Gather context from available sources:
+1. **Codebase** (if exists): Scan structure, patterns, conventions
+2. **Conversation**: Review discussed requirements and decisions
+3. **Skill References**: Apply embedded domain expertise
+4. **User Guidelines**: Follow project-specific conventions
+
+Adapt approach based on available context.
+Only ask user for what cannot be discovered.
+```
+
+---
+
+## Reusability Issues
+
+### Problem: Hardcoded to Single Requirement
+
+**Before (Bad)**:
+```markdown
+# Sales Dashboard Creator
+
+Creates a bar chart showing monthly sales using Recharts.
+
+## Output
+- Bar chart component
+- Uses blue color scheme
+- Shows last 12 months
+```
+
+**After (Good)**:
+```markdown
+# Data Visualization Creator
+
+Creates visualizations adaptable to data shape, chart type, and library.
+
+## Required Clarifications
+1. **Data shape**: "What structure will input have?"
+2. **Chart type**: "Bar, line, pie, or other?"
+3. **Library**: "Recharts, D3, Chart.js, or no preference?"
+
+## Output
+Adapts based on clarifications.
+```
+
+### Problem: No Variability Analysis
+
+**Fix**: Add Varies vs Constant section:
+
+```markdown
+## Variability Analysis
+
+| What VARIES (ask user) | What's CONSTANT (encoded) |
+|------------------------|---------------------------|
+| Data shape/structure | Accessibility requirements |
+| Chart type preference | Responsive patterns |
+| Library choice | Error handling |
+| Color scheme | Loading states |
+```
+
+### Problem: Too Specific Abstraction Level
+
+**Before (Bad)**:
+```markdown
+# AWS EKS Helm Deployment
+
+Deploys to AWS EKS using Helm charts.
+```
+
+**After (Good)**:
+```markdown
+# Application Deployment
+
+Deploys applications with adaptable platform, orchestration, and configuration.
+
+## Required Clarifications
+1. **Platform**: "AWS, GCP, Azure, or other?"
+2. **Orchestration**: "Kubernetes, ECS, serverless?"
+3. **Configuration**: "Helm, Terraform, CDK?"
+```
+
+---
+
+## Frontmatter Issues
+
+### Problem: Wrong Description Style
+
+**Before (Bad)**:
+```yaml
+description: |
+  Create widgets for apps.
+  Use when building UI components.
+```
+
+**After (Good)**:
+```yaml
+description: |
+  Creates production widgets for applications.
+  This skill should be used when users want to build
+  UI components, visual interfaces, or interactive elements.
+```
+
+### Problem: Name Constraint Violations
+
+**Before (Bad)**:
+```yaml
+name: Widget_Creator    # Uppercase, underscores
+name: my-super-long-skill-name-that-exceeds-the-sixty-four-character-limit  # Too long
+```
+
+**After (Good)**:
+```yaml
+name: widget-creator    # Lowercase, hyphens, ≤64 chars
+```
+
+### Problem: Description Too Long or Missing Format
+
+**Fix**: Use [What] + [When] format, ≤1024 chars:
+
+```yaml
+description: |
+  [What] Creates X, validates Y, generates Z.
+  [When] This skill should be used when users need to
+  build widgets, review code, or process data.
+```
+
+---
+
+## Type-Specific Issues
+
+### Problem: Builder Skill Missing Required Sections
+
+**Fix**: Add all required sections:
+
+```markdown
+## Required Clarifications
+1. Question about input
+2. Question about output
+
+## Output Specification
+[Define what artifact looks like]
+
+## Domain Standards
+### Must Follow
+- [ ] Requirement 1
+### Must Avoid
+- Anti-pattern 1
+
+## Output Checklist
+- [ ] Meets requirements
+- [ ] Follows standards
+```
+
+### Problem: Analyzer Skill Missing Scope
+
+**Fix**: Add analysis scope:
+
+```markdown
+## Analysis Scope
+
+### What to Analyze
+- Code structure
+- Naming conventions
+- Error handling
+
+### What to Ignore
+- Comments and formatting
+- Third-party libraries
+- Generated code
+
+## Evaluation Criteria
+| Criterion | Weight | How to Assess |
+|-----------|--------|---------------|
+| Readability | 30% | Naming, structure |
+| Robustness | 40% | Error handling |
+| Performance | 30% | Complexity |
+```
+
+### Problem: Validator Skill Missing Thresholds
+
+**Fix**: Add clear thresholds:
+
+```markdown
+## Scoring Rubric
+- **3**: Excellent
+- **2**: Adequate
+- **1**: Needs improvement
+- **0**: Missing/Fail
+
+## Thresholds
+| Score | Rating | Action |
+|-------|--------|--------|
+| 90-100 | Pass | Ready for use |
+| 70-89 | Conditional | Minor fixes needed |
+| <70 | Fail | Major rework required |
+
+## Remediation
+| Issue | Fix |
+|-------|-----|
+| Missing X | Add X section |
+| Weak Y | Strengthen with examples |
+```
+
+---
+
 ## Quick Improvement Checklist
 
 When improving a skill, address in this order:
 
 1. **Critical** (blocks usage):
    - [ ] SKILL.md exists and <500 lines
-   - [ ] Frontmatter has name + description
+   - [ ] Frontmatter: name (≤64, lowercase) + description (≤1024, third-person)
    - [ ] Core workflow documented
 
 2. **High Priority** (major quality):
+   - [ ] Before Implementation section (context gathering)
+   - [ ] Domain expertise embedded in `references/`
    - [ ] Clarification questions (for builder skills)
-   - [ ] Official documentation links
    - [ ] Output specification
 
 3. **Medium Priority** (polish):
+   - [ ] Handles variations (not requirement-specific)
    - [ ] Progressive disclosure to references
    - [ ] Error handling guidance
    - [ ] Good/bad examples
 
 4. **Low Priority** (excellence):
+   - [ ] Type-specific sections complete
    - [ ] Update path documented
    - [ ] All edge cases covered
    - [ ] Templates in assets/

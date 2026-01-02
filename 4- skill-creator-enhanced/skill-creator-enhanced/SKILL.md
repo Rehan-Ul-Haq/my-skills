@@ -1,65 +1,156 @@
 ---
 name: skill-creator-enhanced
-description: Production-grade guide for creating excellent skills. Use when users want to create a new skill (or update an existing skill) that extends Claude's capabilities. Covers structure, content quality, user interaction patterns, documentation, domain standards enforcement, and technical robustness. Creates skills that score 90+ on skill-validator.
+description: |
+  Creates production-grade, reusable skills that extend Claude's capabilities.
+  This skill should be used when users want to create a new skill, improve an
+  existing skill, or build domain-specific intelligence. Gathers context from
+  codebase, conversation, and authentic sources before creating adaptable skills.
 ---
 
 # Skill Creator Enhanced
 
 Create production-grade skills that extend Claude's capabilities.
 
+## How This Skill Works
+
+```
+User: "Create a skill for X"
+       ↓
+Claude Code uses this meta-skill as guidance
+       ↓
+Follow Domain Discovery → Ask user clarifying questions → Create skill
+       ↓
+Generated skill with embedded domain expertise
+```
+
+This skill provides **guidance and structure** for creating skills. Claude Code:
+1. Uses this skill's framework to discover domain knowledge
+2. Asks user for clarifications about THEIR specific requirements
+3. Decides how to structure the generated skill based on domain needs
+
 ## What This Skill Does
 
 - Guides creation of new skills from scratch
 - Helps improve existing skills to production quality
-- Provides patterns for all skill types (Builder, Guide, Automation)
-- Ensures skills meet validation criteria
+- Provides patterns for 5 skill types (Builder, Guide, Automation, Analyzer, Validator)
+- Ensures skills encode procedural knowledge + domain expertise
 
 ## What This Skill Does NOT Do
 
-- Create the actual domain content (user provides that)
 - Test skills in production environments
 - Deploy or distribute skills
 - Handle skill versioning/updates after creation
+- Create requirement-specific skills (always create reusable intelligence)
+
+---
+
+## Domain Discovery Framework
+
+**Key Principle**: Users want domain expertise IN the skill. They may not BE domain experts.
+
+### Phase 1: Automatic Discovery (No User Input)
+
+Proactively research the domain before asking anything:
+
+| Discover | How | Example: "Kafka integration" |
+|----------|-----|------------------------------|
+| Core concepts | Official docs, Context7 | Producers, consumers, topics, partitions |
+| Standards/compliance | Search "[domain] standards" | Kafka security, exactly-once semantics |
+| Best practices | Search "[domain] best practices 2025" | Partitioning strategies, consumer groups |
+| Anti-patterns | Search "[domain] common mistakes" | Too many partitions, no monitoring |
+| Security | Search "[domain] security" | SASL, SSL, ACLs, encryption |
+| Ecosystem | Search "[domain] ecosystem tools" | Confluent, Schema Registry, Connect |
+
+**Sources priority**: Official docs → Library docs (Context7) → GitHub → Community → WebSearch
+
+### Phase 2: Knowledge Sufficiency Check
+
+Before asking user anything, verify internally:
+
+```
+- [ ] Core concepts understood?
+- [ ] Best practices identified?
+- [ ] Anti-patterns known?
+- [ ] Security considerations covered?
+- [ ] Official sources found?
+
+If ANY gap → Research more (don't ask user for domain knowledge)
+Only if CANNOT discover (proprietary/internal) → Ask user
+```
+
+### Phase 3: User Requirements (NOT Domain Knowledge)
+
+Only ask about user's SPECIFIC context:
+
+| Ask | Don't Ask |
+|-----|-----------|
+| "What's YOUR use case?" | "What is Kafka?" |
+| "What's YOUR tech stack?" | "What options exist?" |
+| "Any existing resources?" | "How does it work?" |
+| "Specific constraints?" | "What are best practices?" |
+
+The skill contains domain expertise. User provides requirements.
 
 ---
 
 ## Required Clarifications
 
-Before creating a skill, ask:
+Ask about SKILL METADATA and USER REQUIREMENTS (not domain knowledge):
 
-### 1. Skill Type
-"What type of skill are you creating?"
-- **Builder** → Creates artifacts (widgets, code, documents)
-- **Guide** → Provides instructions (how-to, tutorials)
-- **Automation** → Executes workflows (file processing, deployments)
+### Skill Metadata
 
-### 2. Domain
-"What domain or technology does this skill cover?"
-- Example: "ChatGPT widgets", "PDF processing", "BigQuery analytics"
+**1. Skill Type** - "What type of skill?"
 
-### 3. Concrete Examples
-"Can you give 2-3 examples of how this skill would be used?"
-- Example prompts users would give
-- Expected outputs for each
+| Type | Purpose | Example |
+|------|---------|---------|
+| **Builder** | Create artifacts | Widgets, code, documents |
+| **Guide** | Provide instructions | How-to, tutorials |
+| **Automation** | Execute workflows | File processing, deployments |
+| **Analyzer** | Extract insights | Code review, data analysis |
+| **Validator** | Enforce quality | Compliance checks, scoring |
 
-### 4. Existing Resources
-"Do you have any existing scripts, templates, or documentation to include?"
-- Scripts for `scripts/`
-- Templates for `assets/`
-- Reference docs for `references/`
+**2. Domain** - "What domain or technology?"
 
-### Optional Clarifications
+### User Requirements (After Domain Discovery)
 
-5. **Official Docs**: "Are there official documentation URLs for this domain?"
-6. **Standards**: "Are there industry standards to enforce?" (WCAG, OWASP, etc.)
+**3. Use Case** - "What's YOUR specific use case?"
+- Not "what can it do" but "what do YOU need"
+
+**4. Tech Stack** - "What's YOUR environment?"
+- Languages, frameworks, existing infrastructure
+
+**5. Existing Resources** - "Any scripts, templates, configs to include?"
+
+**6. Constraints** - "Any specific requirements or limitations?"
+- Performance, security, compliance specific to user's context
+
+### Note
+- Questions 1-2: Ask immediately
+- Domain Discovery: Research automatically after knowing domain
+- Questions 3-6: Ask after discovery, informed by domain knowledge
+- **Question pacing**: Avoid asking too many questions in a single message. Start with most important, follow up as needed.
 
 ---
 
 ## Core Principles
 
+### Reusable Intelligence, Not Requirement-Specific
+
+Skills must handle VARIATIONS, not single requirements:
+
+```
+❌ Bad: "Create bar chart with sales data using Recharts"
+✅ Good: "Create visualizations - adaptable to data shape, chart type, library"
+
+❌ Bad: "Deploy to AWS EKS with Helm"
+✅ Good: "Deploy applications - adaptable to platform, orchestration, environment"
+```
+
+Identify what VARIES vs what's CONSTANT in the domain. See `references/reusability-patterns.md`.
+
 ### Concise is Key
 
-Context window is a public good. Challenge each piece of information:
+Context window is a public good (~1,500+ tokens per skill activation). Challenge each piece:
 - "Does Claude really need this explanation?"
 - "Does this paragraph justify its token cost?"
 
@@ -79,23 +170,25 @@ Match specificity to task fragility:
 
 Three-level loading system:
 
-1. **Metadata** (~100 words) - Always in context
+1. **Metadata** (~100 tokens) - Always in context (description ≤1024 chars)
 2. **SKILL.md body** (<500 lines) - When skill triggers
-3. **References** (unlimited) - As needed by Claude
+3. **References** (unlimited) - Loaded as needed by Claude
 
 ---
 
 ## Anatomy of a Skill
 
+Generated skills are **zero-shot domain experts** with embedded knowledge.
+
 ```
 skill-name/
 ├── SKILL.md (required)
-│   ├── YAML frontmatter (name, description)
-│   └── Markdown instructions
-└── Bundled Resources (optional)
-    ├── scripts/      - Executable code
-    ├── references/   - Documentation loaded as needed
-    └── assets/       - Templates, images, fonts
+│   ├── YAML frontmatter (name, description, allowed-tools?, model?)
+│   └── Procedural knowledge (workflows, steps, decision trees)
+└── Bundled Resources
+    ├── references/   - Domain expertise (structure based on domain needs)
+    ├── scripts/      - Executable code (tested, reliable)
+    └── assets/       - Templates, boilerplate, images
 ```
 
 ### SKILL.md Requirements
@@ -103,9 +196,51 @@ skill-name/
 | Component | Requirement |
 |-----------|-------------|
 | Line count | <500 lines (extract to references/) |
-| Frontmatter | `name` + `description` with triggers |
+| Frontmatter | See `references/skill-patterns.md` for complete spec |
+| `name` | Lowercase, numbers, hyphens; ≤64 chars; match directory |
+| `description` | [What] + [When]; ≤1024 chars; third-person style |
+| Description style | "This skill should be used when..." (not "Use when...") |
 | Form | Imperative ("Do X" not "You should X") |
 | Scope | What it does AND does not do |
+
+### What Goes in references/
+
+Embed domain knowledge gathered during discovery:
+
+| Gathered Knowledge | Purpose in Skill |
+|--------------------|------------------|
+| Library/API documentation | Enable correct implementation |
+| Best practices | Guide quality decisions |
+| Code examples | Provide reference patterns |
+| Anti-patterns | Prevent common mistakes |
+| Domain-specific details | Support edge cases |
+
+**Structure references/ based on what the domain needs.**
+
+**Large files**: If references >10k words, include grep search patterns in SKILL.md for efficient discovery.
+
+### When to Generate scripts/
+
+Generate scripts when domain requires **deterministic, executable procedures**:
+
+| Domain Need | Example Scripts |
+|-------------|-----------------|
+| Setup/installation | Install dependencies, initialize project |
+| Processing | Transform data, process files |
+| Validation | Check compliance, verify output |
+| Deployment | Deploy services, configure infrastructure |
+
+**Decision**: If procedure is complex, error-prone, or needs to be exactly repeatable → create script. Otherwise → document in SKILL.md or references/.
+
+### When to Generate assets/
+
+Generate assets when domain requires **exact templates or boilerplate**:
+
+| Domain Need | Example Assets |
+|-------------|----------------|
+| Starting templates | HTML boilerplate, component scaffolds |
+| Configuration files | Config templates, schema definitions |
+| Code boilerplate | Base classes, starter code |
 
 ### What NOT to Include
 
@@ -114,87 +249,85 @@ skill-name/
 - LICENSE (inherited from repo)
 - Duplicate information
 
+### What Generated Skill Does at Runtime
+
+```
+User invokes skill → Gather context from:
+  1. Codebase (if existing project)
+  2. Conversation (user's requirements)
+  3. Own references/ (embedded domain expertise)
+  4. User-specific guidelines
+→ Ensure all information gathered → Implement ZERO-SHOT
+```
+
+### Include in Generated Skills
+
+Every generated skill should include:
+
+```markdown
+## Before Implementation
+
+Gather context to ensure successful implementation:
+
+| Source | Gather |
+|--------|--------|
+| **Codebase** | Existing structure, patterns, conventions to integrate with |
+| **Conversation** | User's specific requirements, constraints, preferences |
+| **Skill References** | Domain patterns from `references/` (library docs, best practices, examples) |
+| **User Guidelines** | Project-specific conventions, team standards |
+
+Ensure all required context is gathered before implementing.
+Only ask user for THEIR specific requirements (domain expertise is in this skill).
+```
+
+---
+
+## Type-Aware Creation
+
+After determining skill type, follow type-specific patterns:
+
+| Type | Key Sections | Reference |
+|------|--------------|-----------|
+| **Builder** | Clarifications → Output Spec → Standards → Checklist | `skill-patterns.md#builder` |
+| **Guide** | Workflow → Examples → Official Docs | `skill-patterns.md#guide` |
+| **Automation** | Scripts → Dependencies → Error Handling | `skill-patterns.md#automation` |
+| **Analyzer** | Scope → Criteria → Output Format | `skill-patterns.md#analyzer` |
+| **Validator** | Criteria → Scoring → Thresholds → Remediation | `skill-patterns.md#validator` |
+
 ---
 
 ## Skill Creation Process
 
-### Step 1: Understand with Examples
-
-Ask clarifying questions (see Required Clarifications above).
-
-Conclude when you have:
-- Clear skill type (Builder/Guide/Automation)
-- 2-3 concrete usage examples
-- Known resources to include
-
-### Step 2: Plan Resources
-
-For each example, identify:
-
-| Resource Type | When to Create |
-|---------------|----------------|
-| `scripts/` | Same code rewritten repeatedly, deterministic reliability needed |
-| `references/` | Documentation Claude should reference while working |
-| `assets/` | Templates, images, boilerplate for output |
-
-### Step 3: Initialize
-
-```bash
-scripts/init_skill.py <skill-name> --path <output-directory>
+```
+Metadata → Discovery → Requirements → Analyze → Embed → Structure → Implement → Validate
 ```
 
-Creates template with proper structure.
+See `references/creation-workflow.md` for detailed steps.
 
-### Step 4: Implement
+### Quick Steps
 
-1. **Start with resources** - Create scripts/, references/, assets/ files
-2. **Test scripts** - Run to verify they work
-3. **Write SKILL.md** - Follow patterns below
+1. **Metadata**: Ask skill type + domain (Questions 1-2)
+2. **Discovery**: Research domain automatically (Phase 1-2 above)
+3. **Requirements**: Ask user's specific needs (Questions 3-6)
+4. **Analyze**: Identify procedural (HOW) + domain (WHAT) knowledge
+5. **Embed**: Put gathered domain expertise into `references/`
+6. **Structure**: Initialize skill directory
+7. **Implement**: Write SKILL.md + resources following type patterns
+8. **Validate**: Run `scripts/package_skill.py` and test
 
-#### SKILL.md Patterns
+### SKILL.md Template
 
-**Frontmatter**:
 ```yaml
 ---
-name: skill-name
-description: What it does + when to use + triggers. Use when users ask to...
+name: skill-name                    # lowercase, hyphens, ≤64 chars
+description: |                      # ≤1024 chars
+  [What] Capability statement.
+  [When] Use when users ask to <triggers>.
+allowed-tools: Read, Grep, Glob     # optional: restrict tools
 ---
 ```
 
-**Body structure**:
-1. What this skill does / does not do
-2. Required clarifications (for Builder skills)
-3. Core workflow steps
-4. Reference files table
-5. Output checklist
-
-See `references/skill-patterns.md` for complete patterns.
-
-### Step 5: Add Quality Elements
-
-For production-grade skills, include:
-
-| Element | Where | Purpose |
-|---------|-------|---------|
-| Clarification questions | SKILL.md | Prevent wrong assumptions |
-| Official doc links | references/ | Enable latest patterns |
-| Enforcement checklists | SKILL.md or references/ | Ensure compliance |
-| Output checklist | SKILL.md | Quality gate before delivery |
-| Error handling | references/ | Graceful failures |
-
-See `references/quality-patterns.md` for implementation details.
-
-### Step 6: Package
-
-```bash
-scripts/package_skill.py <path/to/skill-folder>
-```
-
-Validates and creates `.skill` file.
-
-### Step 7: Iterate
-
-Use skill on real tasks → Notice issues → Update and retest.
+See `references/skill-patterns.md` for complete frontmatter spec and body patterns.
 
 ---
 
@@ -202,64 +335,54 @@ Use skill on real tasks → Notice issues → Update and retest.
 
 Before delivering a skill, verify:
 
+### Domain Discovery Complete
+- [ ] Core concepts discovered and understood
+- [ ] Best practices identified from authentic sources
+- [ ] Anti-patterns documented
+- [ ] Security considerations covered
+- [ ] Official documentation linked
+- [ ] User was NOT asked for domain knowledge
+
+### Frontmatter
+- [ ] `name`: lowercase, hyphens, ≤64 chars, matches directory
+- [ ] `description`: [What]+[When], ≤1024 chars, clear triggers
+- [ ] `allowed-tools`: Set if restricted access needed
+
 ### Structure
-- [ ] SKILL.md exists and <500 lines
-- [ ] Frontmatter has name + description with triggers
-- [ ] No README.md, CHANGELOG.md in skill directory
+- [ ] SKILL.md <500 lines
 - [ ] Progressive disclosure (details in references/)
 
-### Content
-- [ ] Imperative form throughout
-- [ ] Scope clarity (does / does not do)
-- [ ] Clear workflow steps
-- [ ] No verbose explanations
+### Knowledge Coverage
+- [ ] **Procedural** (HOW): Workflows, decision trees, error handling
+- [ ] **Domain** (WHAT): Concepts, best practices, anti-patterns
 
-### User Interaction (Builder skills)
-- [ ] Required clarifications section
-- [ ] Optional clarifications separated
-- [ ] Context awareness guidance
+### Zero-Shot Implementation (in generated skill)
+- [ ] Includes "Before Implementation" section
+- [ ] Gathers runtime context (codebase, conversation, user guidelines)
+- [ ] Domain expertise embedded in `references/` (structured per domain needs)
+- [ ] Only asks user for THEIR requirements (not domain knowledge)
 
-### Documentation
-- [ ] Official doc links (if applicable)
-- [ ] Reference files for complex details
-- [ ] "When to read" table for references
+### Reusability
+- [ ] Handles variations (not requirement-specific)
+- [ ] Clarifications capture variable elements (user's context)
+- [ ] Constants encoded (domain patterns, best practices)
 
-### Domain Standards (if applicable)
-- [ ] Must Follow checklist
-- [ ] Must Avoid list
-- [ ] Output quality gate
-
-### Technical (if applicable)
-- [ ] Error handling guidance
-- [ ] Dependencies documented
-- [ ] Scripts tested
+### Type-Specific (see `references/skill-patterns.md`)
+- [ ] Builder: Clarifications, output spec, standards, checklist
+- [ ] Guide: Workflow, examples, official docs
+- [ ] Automation: Scripts, dependencies, error handling
+- [ ] Analyzer: Scope, criteria, output format
+- [ ] Validator: Criteria, scoring, thresholds, remediation
 
 ---
 
 ## Reference Files
-
 | File | When to Read |
 |------|--------------|
-| `references/skill-patterns.md` | SKILL.md structure and examples |
+| `references/creation-workflow.md` | Detailed step-by-step creation process |
+| `references/skill-patterns.md` | Frontmatter spec, type-specific patterns, assets guidance |
+| `references/reusability-patterns.md` | Procedural+domain knowledge, varies vs constant |
 | `references/quality-patterns.md` | Clarifications, enforcement, checklists |
 | `references/technical-patterns.md` | Error handling, security, dependencies |
-| `references/workflows.md` | Sequential and conditional workflows |
+| `references/workflows.md` | Sequential and conditional workflow patterns |
 | `references/output-patterns.md` | Template and example patterns |
-
----
-
-## Quick Reference
-
-### Must Follow
-- [ ] SKILL.md <500 lines
-- [ ] Frontmatter with triggers
-- [ ] Imperative form
-- [ ] No extraneous files
-- [ ] Progressive disclosure
-
-### Must Avoid
-- Verbose explanations
-- "You should" language
-- Duplicate information
-- Deep reference nesting
-- README.md files

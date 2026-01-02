@@ -1,6 +1,12 @@
 ---
 name: skill-validator
-description: Validate skills against production-level criteria. Use when reviewing, auditing, or improving skills to ensure they meet quality standards. Evaluates structure, content quality, user interaction patterns, documentation completeness, domain standards compliance, and technical robustness. Returns actionable validation report with scores and improvement recommendations.
+description: |
+  Validates skills against production-level criteria with 9-category scoring.
+  This skill should be used when reviewing, auditing, or improving skills to
+  ensure quality standards. Evaluates structure, content, user interaction,
+  documentation, domain standards, technical robustness, maintainability,
+  zero-shot implementation, and reusability. Returns actionable validation
+  report with scores and improvement recommendations.
 ---
 
 # Skill Validator
@@ -16,13 +22,16 @@ Validate any skill against production-level quality criteria.
    - Builder skill (creates artifacts)
    - Guide skill (provides instructions)
    - Automation skill (executes workflows)
-   - Hybrid skill (combination)
+   - Analyzer skill (extracts insights)
+   - Validator skill (enforces quality)
+   - Hybrid skill (combination of above)
 3. **Read all reference files** in `references/` directory
 4. **Check for assets/scripts** directories
+5. **Note frontmatter fields** (`name`, `description`, `allowed-tools`, `model`)
 
 ### Phase 2: Apply Criteria
 
-Evaluate against **7 criteria categories**. Each criterion scores 0-3:
+Evaluate against **9 criteria categories**. Each criterion scores 0-3:
 - **0**: Missing/Absent
 - **1**: Present but inadequate
 - **2**: Adequate implementation
@@ -32,21 +41,24 @@ Evaluate against **7 criteria categories**. Each criterion scores 0-3:
 
 ## Criteria Categories
 
-### 1. Structure & Anatomy (Weight: 15%)
+### 1. Structure & Anatomy (Weight: 12%)
 
 | Criterion | What to Check |
 |-----------|---------------|
 | **SKILL.md exists** | Root file present |
 | **Line count** | <500 lines (context is precious) |
-| **Frontmatter** | `name` and `description` present in YAML |
-| **Description quality** | Triggers: when to use, what it does, key features |
+| **Frontmatter complete** | `name` and `description` present in YAML |
+| **Name constraints** | Lowercase, numbers, hyphens only; ≤64 chars; matches directory |
+| **Description format** | [What] + [When] format; ≤1024 chars |
+| **Description style** | Third-person: "This skill should be used when..." |
 | **No extraneous files** | No README.md, CHANGELOG.md, LICENSE in skill dir |
 | **Progressive disclosure** | Details in `references/`, not bloated SKILL.md |
 | **Asset organization** | Templates in `assets/`, scripts in `scripts/` |
+| **Large file guidance** | If references >10k words, grep patterns in SKILL.md |
 
 **Fail condition**: Missing SKILL.md or >800 lines = automatic fail
 
-### 2. Content Quality (Weight: 20%)
+### 2. Content Quality (Weight: 15%)
 
 | Criterion | What to Check |
 |-----------|---------------|
@@ -57,7 +69,7 @@ Evaluate against **7 criteria categories**. Each criterion scores 0-3:
 | **No hallucination risk** | No instructions that encourage making up info |
 | **Output specification** | Clear expected outputs defined |
 
-### 3. User Interaction (Weight: 15%)
+### 3. User Interaction (Weight: 12%)
 
 | Criterion | What to Check |
 |-----------|---------------|
@@ -65,6 +77,7 @@ Evaluate against **7 criteria categories**. Each criterion scores 0-3:
 | **Required vs optional** | Distinguishes must-know from nice-to-know |
 | **Graceful handling** | What to do when user doesn't answer |
 | **No over-asking** | Doesn't ask obvious or inferrable questions |
+| **Question pacing** | Avoids too many questions in single message |
 | **Context awareness** | Uses available context before asking |
 
 **Key pattern to look for**:
@@ -75,9 +88,11 @@ Evaluate against **7 criteria categories**. Each criterion scores 0-3:
 
 ## Optional Clarifications
 3. Question about Z (if relevant)
+
+Note: Avoid asking too many questions in a single message.
 ```
 
-### 4. Documentation & References (Weight: 15%)
+### 4. Documentation & References (Weight: 10%)
 
 | Criterion | What to Check |
 |-----------|---------------|
@@ -94,7 +109,7 @@ Evaluate against **7 criteria categories**. Each criterion scores 0-3:
 | Official Docs | https://... | Complex cases |
 ```
 
-### 5. Domain Standards (Weight: 15%)
+### 5. Domain Standards (Weight: 10%)
 
 | Criterion | What to Check |
 |-----------|---------------|
@@ -114,7 +129,7 @@ Evaluate against **7 criteria categories**. Each criterion scores 0-3:
 - Antipattern 2
 ```
 
-### 6. Technical Robustness (Weight: 10%)
+### 6. Technical Robustness (Weight: 8%)
 
 | Criterion | What to Check |
 |-----------|---------------|
@@ -124,7 +139,7 @@ Evaluate against **7 criteria categories**. Each criterion scores 0-3:
 | **Edge cases** | Common edge cases addressed |
 | **Testability** | Can outputs be verified? |
 
-### 7. Maintainability (Weight: 10%)
+### 7. Maintainability (Weight: 8%)
 
 | Criterion | What to Check |
 |-----------|---------------|
@@ -132,6 +147,74 @@ Evaluate against **7 criteria categories**. Each criterion scores 0-3:
 | **Update path** | Easy to update when standards change |
 | **No hardcoded values** | Uses placeholders/variables where appropriate |
 | **Clear organization** | Logical section ordering |
+
+### 8. Zero-Shot Implementation (Weight: 12%)
+
+Skills should enable single-interaction implementation with embedded expertise.
+
+| Criterion | What to Check |
+|-----------|---------------|
+| **Before Implementation section** | Context gathering guidance present |
+| **Codebase context** | Guidance to scan existing structure/patterns |
+| **Conversation context** | Uses discussed requirements/decisions |
+| **Embedded expertise** | Domain knowledge in `references/`, not runtime discovery |
+| **User-only questions** | Only asks for USER requirements, not domain knowledge |
+
+**Key pattern to look for**:
+```markdown
+## Before Implementation
+
+Gather context to ensure successful implementation:
+
+| Source | Gather |
+|--------|--------|
+| **Codebase** | Existing structure, patterns, conventions |
+| **Conversation** | User's specific requirements |
+| **Skill References** | Domain patterns from `references/` |
+| **User Guidelines** | Project-specific conventions |
+```
+
+**Red flag**: Skill instructs to "research" or "discover" domain knowledge at runtime instead of embedding it.
+
+### 9. Reusability (Weight: 13%)
+
+Skills should handle variations, not single requirements.
+
+| Criterion | What to Check |
+|-----------|---------------|
+| **Handles variations** | Not hardcoded to single use case |
+| **Variable elements** | Clarifications capture what VARIES |
+| **Constant patterns** | Domain best practices encoded as constants |
+| **Not requirement-specific** | Avoids hardcoded data, tools, configs |
+| **Abstraction level** | Appropriate generalization for domain |
+
+**Good example**:
+```markdown
+"Create visualizations - adaptable to data shape, chart type, library"
+```
+
+**Bad example (too specific)**:
+```markdown
+"Create bar chart with sales data using Recharts"
+```
+
+**Key check**: Does the skill work for multiple use cases within its domain?
+
+---
+
+## Type-Specific Validation
+
+After scoring general criteria, verify type-specific requirements:
+
+| Type | Must Have |
+|------|-----------|
+| **Builder** | Clarifications, Output Spec, Domain Standards, Output Checklist |
+| **Guide** | Workflow Steps, Examples (Good/Bad), Official Docs links |
+| **Automation** | Scripts in `scripts/`, Dependencies, Error Handling, I/O Spec |
+| **Analyzer** | Analysis Scope, Evaluation Criteria, Output Format, Synthesis |
+| **Validator** | Quality Criteria, Scoring Rubric, Thresholds, Remediation |
+
+**Scoring**: Deduct 10 points if type-specific requirements missing for identified type.
 
 ---
 
@@ -179,13 +262,16 @@ Generate validation report:
 
 | Category | Score | Weight | Weighted |
 |----------|-------|--------|----------|
-| Structure & Anatomy | X/100 | 15% | X |
-| Content Quality | X/100 | 20% | X |
-| User Interaction | X/100 | 15% | X |
-| Documentation | X/100 | 15% | X |
-| Domain Standards | X/100 | 15% | X |
-| Technical Robustness | X/100 | 10% | X |
-| Maintainability | X/100 | 10% | X |
+| Structure & Anatomy | X/100 | 12% | X |
+| Content Quality | X/100 | 15% | X |
+| User Interaction | X/100 | 12% | X |
+| Documentation | X/100 | 10% | X |
+| Domain Standards | X/100 | 10% | X |
+| Technical Robustness | X/100 | 8% | X |
+| Maintainability | X/100 | 8% | X |
+| Zero-Shot Implementation | X/100 | 12% | X |
+| Reusability | X/100 | 13% | X |
+| **Type-Specific Deduction** | -X | - | -X |
 
 ## Critical Issues (if any)
 - [Issue requiring immediate fix]
@@ -205,18 +291,33 @@ Generate validation report:
 
 For rapid assessment, check these critical items:
 
+### Structure & Frontmatter
 - [ ] SKILL.md <500 lines
-- [ ] Frontmatter has name + description
+- [ ] Frontmatter: name (≤64 chars, lowercase, hyphens) + description (≤1024 chars)
+- [ ] Description uses third-person style ("This skill should be used when...")
 - [ ] No README.md/CHANGELOG.md in skill directory
-- [ ] Has clarification questions for builder skills
-- [ ] Has official documentation links
-- [ ] Has enforcement checklist (if domain standards exist)
-- [ ] Has output specification
-- [ ] References exist for complex details
 
-**If 6+ checked**: Likely Good or better
-**If 4-5 checked**: Likely Adequate
-**If <4 checked**: Needs significant work
+### Content & Interaction
+- [ ] Has clarification questions (Required vs Optional)
+- [ ] Has output specification
+- [ ] Has official documentation links
+
+### Zero-Shot & Reusability
+- [ ] Has "Before Implementation" section (context gathering)
+- [ ] Domain expertise embedded in `references/` (not runtime discovery)
+- [ ] Handles variations (not requirement-specific)
+
+### Type-Specific (check based on skill type)
+- [ ] Builder: Clarifications + Output Spec + Standards + Checklist
+- [ ] Guide: Workflow + Examples + Docs
+- [ ] Automation: Scripts + Dependencies + Error Handling
+- [ ] Analyzer: Scope + Criteria + Output Format
+- [ ] Validator: Criteria + Scoring + Thresholds + Remediation
+
+**If 10+ checked**: Likely Production (90+)
+**If 7-9 checked**: Likely Good (75-89)
+**If 5-6 checked**: Likely Adequate (60-74)
+**If <5 checked**: Needs significant work
 
 ---
 

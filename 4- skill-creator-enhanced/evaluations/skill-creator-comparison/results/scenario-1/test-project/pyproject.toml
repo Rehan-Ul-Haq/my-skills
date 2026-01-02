@@ -1,0 +1,8 @@
+[project]
+name = "csvtool"
+version = "0.1.0"
+description = "A CLI tool for processing CSV files"
+requires-python = ">=3.8"
+
+[project.scripts]
+csvtool = "csvtool:main"
