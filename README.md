@@ -10,6 +10,7 @@ A curated collection of production-grade skills for Claude Code and AI agents.
 | 2 | [skill-validator](2-%20skill-validator/) | Validate skills against production-level quality criteria | v1.0.0 |
 | 3 | [chatgpt-widget-creator](3-%20chatgpt-appsdk-widget-creator/) | Create production-grade widgets for ChatGPT Apps | v1.0.0 |
 | 4 | [skill-creator-pro](4-%20skill-creator-pro/) | Create skills that score 96/100 on skill-validator | v2.1.0 |
+| 5 | [interview](5-%20interview/) | Discover user intent before building the wrong thing | v1.0.0 |
 
 ---
 
@@ -97,6 +98,28 @@ A curated collection of production-grade skills for Claude Code and AI agents.
 
 ---
 
+### 5. interview
+
+**Purpose**: Discover user intent (WHY) before taking action to prevent building the wrong thing.
+
+**Key Features**:
+- WHY + WHAT discovery model
+- Surface and validate hidden assumptions
+- Laddering and 5 Whys techniques
+- Structured agreement before proceeding
+
+**Use When**: Requests are ambiguous, recommendations needed, brainstorming, or high-stakes work.
+
+```
+/interview
+"Help me think through..."
+"What should I use for..."
+```
+
+[View Documentation](5-%20interview/README.md)
+
+---
+
 ## Installation
 
 ### For Claude Code
@@ -136,10 +159,13 @@ my-skills/
 │   ├── README.md
 │   ├── CHANGELOG.md
 │   └── chatgpt-widget-creator/        # Skill files
-└── 4- skill-creator-pro/
+├── 4- skill-creator-pro/
+│   ├── README.md
+│   ├── CHANGELOG.md
+│   └── skill-creator-pro/             # Skill files
+└── 5- interview/
     ├── README.md
-    ├── CHANGELOG.md
-    └── skill-creator-pro/             # Skill files
+    └── interview/                     # Skill files
 ```
 
 ---
