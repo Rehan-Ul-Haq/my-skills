@@ -1,9 +1,18 @@
 # Changelog
 
-All notable changes to the `skill-creator-enhanced` skill will be documented in this file.
+All notable changes to the `skill-creator-pro` skill will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.1.0] - 2026-01-04
+
+### Changed
+- **Renamed** from `skill-creator-enhanced` to `skill-creator-pro`
+- **Description style** improvements across skill templates
+
+### Fixed
+- Added "Before Implementation" section to all skill types (was missing for some types)
 
 ## [2.0.0] - 2025-01-02
 

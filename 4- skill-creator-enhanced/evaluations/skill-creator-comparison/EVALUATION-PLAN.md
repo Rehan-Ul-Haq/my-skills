@@ -4,7 +4,7 @@
 
 **Subjects**:
 - A: `skill-creator` (basic)
-- B: `skill-creator-enhanced`
+- B: `skill-creator-pro`
 
 **Objective**: Evaluate which skill creator produces better skills across multiple dimensions.
 

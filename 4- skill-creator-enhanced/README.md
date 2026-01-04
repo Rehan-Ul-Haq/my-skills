@@ -1,12 +1,12 @@
-# skill-creator-enhanced
+# skill-creator-pro
 
-[![Version](https://img.shields.io/badge/Version-2.0.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-2.1.0-blue)](CHANGELOG.md)
 
 Production-grade skill creation with domain discovery and embedded expertise.
 
 ## Why Use This Over Official skill-creator?
 
-| Official skill-creator | skill-creator-enhanced |
+| Official skill-creator | skill-creator-pro |
 |------------------------|------------------------|
 | Asks user for domain knowledge | Discovers domain knowledge automatically |
 | Template-based approach | Pattern-based with reusability |
@@ -58,7 +58,7 @@ The skill will:
 ## Structure
 
 ```
-skill-creator-enhanced/
+skill-creator-pro/
 ├── SKILL.md (389 lines)
 ├── scripts/
 │   ├── init_skill.py          # Initialize new skill
@@ -106,5 +106,5 @@ Metadata → Discovery → Requirements → Analyze → Embed → Structure → 
 
 ```bash
 # Copy to Claude Code skills directory
-cp -r skill-creator-enhanced ~/.claude/skills/
+cp -r skill-creator-pro ~/.claude/skills/
 ```

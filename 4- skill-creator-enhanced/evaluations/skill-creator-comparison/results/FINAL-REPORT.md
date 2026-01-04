@@ -5,7 +5,7 @@
 | Creator | Average Score | Wins | Best For |
 |---------|--------------|------|----------|
 | **skill-creator** (A) | 2.76 | 0/6 | Simple, well-understood domains |
-| **skill-creator-enhanced** (B) | 3.89 | 6/6 | Technical domains, production use |
+| **skill-creator-pro** (B) | 3.89 | 6/6 | Technical domains, production use |
 
 **Verdict**: Creator B consistently outperforms Creator A across all scenarios, with the gap widening for technical/security-critical domains.
 
@@ -145,7 +145,7 @@ Creator A skills:
 - Skill is for personal/experimental use
 - User IS a domain expert
 
-### Use skill-creator-enhanced (B) When:
+### Use skill-creator-pro (B) When:
 - Domain has non-obvious best practices
 - Security matters
 - Skill will be used in production
@@ -162,7 +162,7 @@ Creator A skills:
 3. Add pre-delivery checklists
 4. Create reference file patterns
 
-### For skill-creator-enhanced (B):
+### For skill-creator-pro (B):
 1. Add "lite" mode for simple domains
 2. Reduce token overhead for well-known domains
 3. Consider lazy-loading reference patterns
@@ -171,7 +171,7 @@ Creator A skills:
 
 ## Conclusion
 
-**skill-creator-enhanced (B)** is the superior choice for production skill creation:
+**skill-creator-pro (B)** is the superior choice for production skill creation:
 
 | Metric | Result |
 |--------|--------|
@@ -186,4 +186,4 @@ The token efficiency trade-off favors B when considering:
 - Embedded domain expertise
 - Production-grade output quality
 
-**Final Verdict**: Use **skill-creator-enhanced** for any skill intended for production use.
+**Final Verdict**: Use **skill-creator-pro** for any skill intended for production use.
