@@ -9,7 +9,7 @@ A curated collection of production-grade skills for Claude Code and AI agents.
 | 1 | [fetch-library-docs](1-%20fetch-library-docs/) | Fetch library documentation with 86.8% token savings | v1.0.0 |
 | 2 | [skill-validator](2-%20skill-validator/) | Validate skills against production-level quality criteria | v1.0.0 |
 | 3 | [chatgpt-widget-creator](3-%20chatgpt-appsdk-widget-creator/) | Create production-grade widgets for ChatGPT Apps | v1.0.0 |
-| 4 | [skill-creator-pro](4-%20skill-creator-enhanced/) | Create skills that score 96/100 on skill-validator | v2.1.0 |
+| 4 | [skill-creator-pro](4-%20skill-creator-pro/) | Create skills that score 96/100 on skill-validator | v2.1.0 |
 
 ---
 
@@ -93,9 +93,7 @@ A curated collection of production-grade skills for Claude Code and AI agents.
 "Create a skill for [your domain]"
 ```
 
-[View Documentation](4-%20skill-creator-enhanced/README.md) | [Changelog](4-%20skill-creator-enhanced/CHANGELOG.md)
-
-> **Note**: Folder is named `4- skill-creator-enhanced` but skill is now `skill-creator-pro`.
+[View Documentation](4-%20skill-creator-pro/README.md) | [Changelog](4-%20skill-creator-pro/CHANGELOG.md)
 
 ---
 
@@ -138,7 +136,7 @@ my-skills/
 │   ├── README.md
 │   ├── CHANGELOG.md
 │   └── chatgpt-widget-creator/        # Skill files
-└── 4- skill-creator-enhanced/
+└── 4- skill-creator-pro/
     ├── README.md
     ├── CHANGELOG.md
     └── skill-creator-pro/             # Skill files
