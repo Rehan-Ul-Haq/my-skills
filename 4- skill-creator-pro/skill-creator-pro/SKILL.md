@@ -93,6 +93,29 @@ The skill contains domain expertise. User provides requirements.
 
 ---
 
+## ⚠️ MANDATORY Before Writing SKILL.md
+
+**STOP. DO NOT write SKILL.md until ALL boxes are checked:**
+
+```
+- [ ] Fetched official library/framework documentation (Context7 or WebFetch)
+- [ ] WebSearched "[domain] official documentation" for authoritative sources
+- [ ] WebSearched "[domain] best practices [current year]" for industry standards
+- [ ] Listed ALL variations the skill should handle (not just the user's specific case)
+- [ ] Verified description covers ALL trigger scenarios (not just primary use case)
+- [ ] Confirmed no knowledge gaps remain (Phase 2 complete)
+```
+
+**Why this matters**: Training knowledge may be outdated or incomplete. Skills that skip discovery produce narrow, requirement-specific tools instead of reusable intelligence.
+
+**Common failures when skipped**:
+- Narrow description that misses auto-invoke triggers
+- Missing test types, patterns, or variations
+- Outdated best practices from training data
+- No source citations in references/
+
+---
+
 ## Required Clarifications
 
 Ask about SKILL METADATA and USER REQUIREMENTS (not domain knowledge):
@@ -308,12 +331,13 @@ See `references/creation-workflow.md` for detailed steps.
 
 1. **Metadata**: Ask skill type + domain (Questions 1-2)
 2. **Discovery**: Research domain automatically (Phase 1-2 above)
-3. **Requirements**: Ask user's specific needs (Questions 3-6)
-4. **Analyze**: Identify procedural (HOW) + domain (WHAT) knowledge
-5. **Embed**: Put gathered domain expertise into `references/`
-6. **Structure**: Initialize skill directory
-7. **Implement**: Write SKILL.md + resources following type patterns
-8. **Validate**: Run `scripts/package_skill.py` and test
+3. **⚠️ CHECKPOINT**: Verify MANDATORY checklist is complete (see above)
+4. **Requirements**: Ask user's specific needs (Questions 3-6)
+5. **Analyze**: Identify procedural (HOW) + domain (WHAT) knowledge
+6. **Embed**: Put gathered domain expertise into `references/`
+7. **Structure**: Initialize skill directory
+8. **Implement**: Write SKILL.md + resources following type patterns
+9. **Validate**: Run `scripts/package_skill.py` and test
 
 ### SKILL.md Template
 
