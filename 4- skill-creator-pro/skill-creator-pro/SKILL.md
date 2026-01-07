@@ -220,11 +220,12 @@ skill-name/
 |-----------|-------------|
 | Line count | <500 lines (extract to references/) |
 | Frontmatter | See `references/skill-patterns.md` for complete spec |
-| `name` | Lowercase, numbers, hyphens; ≤64 chars; match directory |
-| `description` | [What] + [When]; ≤1024 chars; third-person style |
-| Description style | "This skill should be used when..." (not "Use when...") |
+| `name` | Gerund form (verb-ing); lowercase, hyphens; ≤64 chars; no "anthropic"/"claude" |
+| `description` | [What] + [When]; ≤1024 chars (≤200 for claude.ai); third-person |
+| `allowed-tools` | Optional; CLI only (not SDK or claude.ai) |
 | Form | Imperative ("Do X" not "You should X") |
 | Scope | What it does AND does not do |
+| Paths | Always use forward slashes (`/`), even on Windows |
 
 ### What Goes in references/
 
@@ -240,7 +241,10 @@ Embed domain knowledge gathered during discovery:
 
 **Structure references/ based on what the domain needs.**
 
-**Large files**: If references >10k words, include grep search patterns in SKILL.md for efficient discovery.
+**Reference file rules**:
+- Keep references **one level deep** (no nested references)
+- Files >100 lines should include a **table of contents** at top
+- If >10k words total, include **grep search patterns** in SKILL.md
 
 ### When to Generate scripts/
 
@@ -271,6 +275,16 @@ Generate assets when domain requires **exact templates or boilerplate**:
 - CHANGELOG.md
 - LICENSE (inherited from repo)
 - Duplicate information
+
+### Platform Constraints
+
+**Cross-platform sync**: Skills do NOT sync across surfaces—upload separately to each platform.
+
+| Platform | Network | Packages | `allowed-tools` |
+|----------|---------|----------|-----------------|
+| Claude Code CLI | Full | Discouraged | ✅ Works |
+| Claude.ai | Varies | Yes | ❌ Ignored |
+| Claude API | None | No | ❌ Ignored |
 
 ### What Generated Skill Does at Runtime
 
@@ -343,11 +357,12 @@ See `references/creation-workflow.md` for detailed steps.
 
 ```yaml
 ---
-name: skill-name                    # lowercase, hyphens, ≤64 chars
-description: |                      # ≤1024 chars
-  [What] Capability statement.
-  [When] Use when users ask to <triggers>.
-allowed-tools: Read, Grep, Glob     # optional: restrict tools
+name: processing-something          # gerund form, lowercase, hyphens, ≤64 chars
+                                    # Cannot contain "anthropic" or "claude"
+description: |                      # ≤1024 chars (≤200 for claude.ai)
+  [What] Capability statement (third-person).
+  [When] This skill should be used when users ask to <triggers>.
+allowed-tools: Read, Grep, Glob     # optional: restrict tools (CLI only)
 ---
 ```
 
@@ -368,13 +383,16 @@ Before delivering a skill, verify:
 - [ ] User was NOT asked for domain knowledge
 
 ### Frontmatter
-- [ ] `name`: lowercase, hyphens, ≤64 chars, matches directory
-- [ ] `description`: [What]+[When], ≤1024 chars, clear triggers
-- [ ] `allowed-tools`: Set if restricted access needed
+- [ ] `name`: gerund form, lowercase, hyphens, ≤64 chars, matches directory
+- [ ] `name`: Does NOT contain "anthropic" or "claude"
+- [ ] `description`: [What]+[When], ≤1024 chars (≤200 for claude.ai), third-person
+- [ ] `allowed-tools`: Set if restricted (CLI only—ignored on other platforms)
 
 ### Structure
 - [ ] SKILL.md <500 lines
 - [ ] Progressive disclosure (details in references/)
+- [ ] References one level deep, TOC if >100 lines
+- [ ] Forward slashes in all paths
 
 ### Knowledge Coverage
 - [ ] **Procedural** (HOW): Workflows, decision trees, error handling
@@ -404,9 +422,9 @@ Before delivering a skill, verify:
 | File | When to Read |
 |------|--------------|
 | `references/creation-workflow.md` | Detailed step-by-step creation process |
-| `references/skill-patterns.md` | Frontmatter spec, type-specific patterns, assets guidance |
+| `references/skill-patterns.md` | Frontmatter spec, naming, type-specific patterns, assets |
 | `references/reusability-patterns.md` | Procedural+domain knowledge, varies vs constant |
-| `references/quality-patterns.md` | Clarifications, enforcement, checklists |
-| `references/technical-patterns.md` | Error handling, security, dependencies |
+| `references/quality-patterns.md` | Clarifications, checklists, testing methodology |
+| `references/technical-patterns.md` | Error handling, security, dependencies, anti-patterns |
 | `references/workflows.md` | Sequential and conditional workflow patterns |
 | `references/output-patterns.md` | Template and example patterns |

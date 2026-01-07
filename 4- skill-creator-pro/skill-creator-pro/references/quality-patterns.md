@@ -285,3 +285,40 @@ except:
     pass  # Never do this - errors are hidden
 ```
 ```
+
+---
+
+## Testing & Evaluation
+
+### Build Evaluations First
+
+Before writing the skill:
+
+1. **Identify gaps** - Run Claude on the task without a skill
+2. **Create test scenarios** - At least 3 representative use cases
+3. **Establish baseline** - Document what Claude gets wrong or misses
+4. **Write minimal instructions** - Address only the gaps
+5. **Iterate** - Refine based on real usage
+
+### Test Across Models
+
+Different models need different detail levels:
+
+| Model | Test For |
+|-------|----------|
+| **Claude Haiku** | Does the skill provide enough guidance? |
+| **Claude Sonnet** | Is the skill clear and efficient? |
+| **Claude Opus** | Does the skill avoid over-explaining? |
+
+A skill that works well on Sonnet but fails on Haiku may need more explicit instructions. A skill that works on all models but feels verbose on Opus may have unnecessary detail.
+
+### Conciseness Principle
+
+**Default assumption**: Claude is already very smart.
+
+For each piece of information, ask:
+- "Does Claude really need this?"
+- "Would Claude figure this out on its own?"
+- "Is this adding value or just words?"
+
+Only add context Claude doesn't already have.

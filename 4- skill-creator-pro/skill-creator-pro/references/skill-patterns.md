@@ -30,22 +30,32 @@ model: claude-sonnet-4-20250514           # Optional: model override
 
 ### Name Constraints
 
+**Naming convention**: Use **gerund form** (verb + -ing):
+
 ```
-✅ Valid: pdf-processor, data-viz, api-v2
+✅ Good: processing-pdfs, analyzing-data, creating-widgets
+❌ Bad: pdf-processor, data-analyzer, widget-creator
 ❌ Invalid: PDF_Processor, dataViz, my skill
+❌ Avoid: helper, utils, tools (too vague)
 ```
 
+**Rules**:
 - Lowercase letters, numbers, hyphens only
 - Maximum 64 characters
 - Must match the directory name exactly
+- **Cannot contain** "anthropic" or "claude"
 
 ### Description Format
 
 **Structure**: `[What it does] + [When to use/triggers]`
 
-**Limit**: ≤1024 characters (truncated if exceeded)
+**Limits**:
+- ≤1024 characters for Claude Code CLI (truncated if exceeded)
+- ≤200 characters for claude.ai uploads
 
-**Purpose**: Claude Code reads this to decide when to activate the skill. Include specific trigger phrases users would say.
+**Style**: Write in **third person** (not "I can help" or "You can use")
+
+**Purpose**: Claude Code reads this to decide when to activate the skill. Include specific trigger phrases users would say. Put ALL trigger keywords here—the body only loads after triggering.
 
 ```yaml
 # Good: Clear what + when with triggers (third-person style)
@@ -60,7 +70,9 @@ description: Helps with charts
 
 ### allowed-tools Usage
 
-Restrict tool access for security or scope:
+Restrict tool access for security or scope.
+
+**Note**: `allowed-tools` only works in Claude Code CLI (not SDK or claude.ai).
 
 ```yaml
 # Read-only skill (no file modifications)

@@ -322,3 +322,39 @@ const result = await withTimeout(fetchData(), 5000);
 | Batch size | 100 items | API rate limits |
 | Concurrent requests | 5 | Prevent overload |
 ```
+
+---
+
+## Anti-Patterns to Avoid
+
+### Skill Design Anti-Patterns
+
+| Anti-Pattern | Why It's Wrong | Do Instead |
+|--------------|----------------|------------|
+| Requirement-specific skill | Not reusable | Handle variations |
+| Hardcoded data/tools/configs | Limits applicability | Make configurable |
+| Missing procedural OR domain | Incomplete skill | Include both |
+| Vague description | Won't trigger | Specific [What]+[When] |
+| Everything in SKILL.md | Context bloat | Use references/ |
+| Verbose explanations | Wastes tokens | Concise examples |
+| Windows-style paths (`\`) | Cross-platform issues | Always use `/` |
+| Too many options | Decision paralysis | Provide sensible default |
+| Deeply nested references | Hard to navigate | Keep one level deep |
+| Punting errors to Claude | Unreliable handling | Handle explicitly in scripts |
+
+### Discovery Anti-Patterns
+
+| Anti-Pattern | Why It's Wrong | Do Instead |
+|--------------|----------------|------------|
+| Ask user for domain knowledge | User may not be expert | Discover from sources |
+| Ask detailed questions first | Don't know what to ask yet | Discover domain first |
+| Hardcode domain patterns | Can't cover all domains | Teach discovery process |
+| Assume context exists | May be new project | Check available sources |
+
+### Question Anti-Patterns
+
+| Anti-Pattern | Example | Do Instead |
+|--------------|---------|------------|
+| Asking what technology does | "What is Kafka?" | Research it |
+| Asking for best practices | "What are best practices?" | Discover them |
+| Asking before knowing domain | Detailed questions upfront | Metadata first, then discover |
