@@ -6,7 +6,7 @@ Calibration examples showing how to score skills consistently.
 
 ## Example 1: Production-Level Skill
 
-**Skill**: chatgpt-widget-creator
+**Skill**: creating-chatgpt-widgets
 **Type**: Builder
 
 ### Category Scores

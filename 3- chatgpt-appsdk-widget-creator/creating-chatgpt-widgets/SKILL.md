@@ -1,9 +1,9 @@
 ---
-name: chatgpt-widget-creator
+name: creating-chatgpt-widgets
 description: Create production-grade widgets for ChatGPT Apps using the OpenAI Apps SDK. Use when users ask to build widgets, UI components, or visual interfaces for ChatGPT applications. Supports any widget type including progress trackers, quiz interfaces, content viewers, data cards, carousels, forms, charts, dashboards, maps, video players, or custom interactive elements. IMPORTANT - Always clarify requirements before building. Creates complete implementations following official OpenAI UX/UI guidelines with window.openai integration, theme support, and accessibility.
 ---
 
-# ChatGPT Widget Creator
+# Creating ChatGPT Widgets
 
 Create production-ready widgets for ChatGPT Apps following official OpenAI guidelines.
 

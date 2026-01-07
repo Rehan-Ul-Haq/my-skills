@@ -335,7 +335,7 @@ For rapid assessment, check these critical items:
 
 ### Validate a skill
 ```
-Validate the chatgpt-widget-creator skill against production criteria
+Validate the creating-chatgpt-widgets skill against production criteria
 ```
 
 ### Quick audit

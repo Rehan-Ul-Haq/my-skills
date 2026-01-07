@@ -1,6 +1,6 @@
-# chatgpt-widget-creator
+# creating-chatgpt-widgets
 
-[![Version](https://img.shields.io/badge/Version-1.0.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.1.0-blue)](CHANGELOG.md)
 
 Create production-grade widgets for ChatGPT Apps using OpenAI Apps SDK.
 
@@ -52,7 +52,7 @@ The skill will ask:
 ## Structure
 
 ```
-chatgpt-widget-creator/
+creating-chatgpt-widgets/
 ├── SKILL.md (262 lines)
 ├── references/
 │   ├── window-openai-api.md   # API reference + CSP

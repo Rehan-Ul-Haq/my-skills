@@ -1,5 +1,7 @@
 # Discovering Intent Skill
 
+[![Version](https://img.shields.io/badge/Version-1.1.0-blue)](CHANGELOG.md)
+
 Prevent building the wrong thing by discovering user intent before taking action.
 
 ## The Problem

@@ -8,9 +8,9 @@ A curated collection of production-grade skills for Claude Code and AI agents.
 |---|-------|-------------|---------|
 | 1 | [fetch-library-docs](1-%20fetch-library-docs/) | Fetch library documentation with 86.8% token savings | v1.0.0 |
 | 2 | [skill-validator](2-%20skill-validator/) | Validate skills against production-level quality criteria | v1.0.0 |
-| 3 | [chatgpt-widget-creator](3-%20chatgpt-appsdk-widget-creator/) | Create production-grade widgets for ChatGPT Apps | v1.0.0 |
+| 3 | [creating-chatgpt-widgets](3-%20chatgpt-appsdk-widget-creator/) | Create production-grade widgets for ChatGPT Apps | v1.1.0 |
 | 4 | [skill-creator-pro](4-%20skill-creator-pro/) | Create skills that score 96/100 on skill-validator | v2.1.0 |
-| 5 | [discovering-intent](5-%20interview/) | Discover user intent before building the wrong thing | v1.0.0 |
+| 5 | [discovering-intent](5-%20discovering-intent/) | Discover user intent before building the wrong thing | v1.1.0 |
 
 ---
 
@@ -57,7 +57,7 @@ A curated collection of production-grade skills for Claude Code and AI agents.
 
 ---
 
-### 3. chatgpt-widget-creator
+### 3. creating-chatgpt-widgets
 
 **Purpose**: Create production-grade widgets for ChatGPT Apps using OpenAI Apps SDK.
 
@@ -116,7 +116,7 @@ A curated collection of production-grade skills for Claude Code and AI agents.
 "Let's clarify requirements..."
 ```
 
-[View Documentation](5-%20interview/README.md)
+[View Documentation](5-%20discovering-intent/README.md) | [Changelog](5-%20discovering-intent/CHANGELOG.md)
 
 ---
 
@@ -158,12 +158,12 @@ my-skills/
 ├── 3- chatgpt-appsdk-widget-creator/
 │   ├── README.md
 │   ├── CHANGELOG.md
-│   └── chatgpt-widget-creator/        # Skill files
+│   └── creating-chatgpt-widgets/      # Skill files
 ├── 4- skill-creator-pro/
 │   ├── README.md
 │   ├── CHANGELOG.md
 │   └── skill-creator-pro/             # Skill files
-└── 5- interview/
+└── 5- discovering-intent/
     ├── README.md
     └── discovering-intent/            # Skill files
 ```
