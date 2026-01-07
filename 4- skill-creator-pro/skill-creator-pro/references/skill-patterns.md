@@ -30,14 +30,16 @@ model: claude-sonnet-4-20250514           # Optional: model override
 
 ### Name Constraints
 
-**Naming convention**: Use **gerund form** (verb + -ing):
+**Naming convention**: **Prefer gerund form** (verb + -ing):
 
 ```
-✅ Good: processing-pdfs, analyzing-data, creating-widgets
-❌ Bad: pdf-processor, data-analyzer, widget-creator
+✅ Preferred: processing-pdfs, analyzing-data, creating-widgets
+✅ Acceptable: pdf-processor, data-analyzer, widget-creator
 ❌ Invalid: PDF_Processor, dataViz, my skill
 ❌ Avoid: helper, utils, tools (too vague)
 ```
+
+Clear naming matters more than strict format.
 
 **Rules**:
 - Lowercase letters, numbers, hyphens only

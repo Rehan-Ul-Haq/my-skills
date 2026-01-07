@@ -10,7 +10,7 @@ A curated collection of production-grade skills for Claude Code and AI agents.
 | 2 | [skill-validator](2-%20skill-validator/) | Validate skills against production-level quality criteria | v1.0.0 |
 | 3 | [chatgpt-widget-creator](3-%20chatgpt-appsdk-widget-creator/) | Create production-grade widgets for ChatGPT Apps | v1.0.0 |
 | 4 | [skill-creator-pro](4-%20skill-creator-pro/) | Create skills that score 96/100 on skill-validator | v2.1.0 |
-| 5 | [interview](5-%20interview/) | Discover user intent before building the wrong thing | v1.0.0 |
+| 5 | [discovering-intent](5-%20interview/) | Discover user intent before building the wrong thing | v1.0.0 |
 
 ---
 
@@ -98,7 +98,7 @@ A curated collection of production-grade skills for Claude Code and AI agents.
 
 ---
 
-### 5. interview
+### 5. discovering-intent
 
 **Purpose**: Discover user intent (WHY) before taking action to prevent building the wrong thing.
 
@@ -111,9 +111,9 @@ A curated collection of production-grade skills for Claude Code and AI agents.
 **Use When**: Requests are ambiguous, recommendations needed, brainstorming, or high-stakes work.
 
 ```
-/interview
 "Help me think through..."
 "What should I use for..."
+"Let's clarify requirements..."
 ```
 
 [View Documentation](5-%20interview/README.md)
@@ -165,7 +165,7 @@ my-skills/
 │   └── skill-creator-pro/             # Skill files
 └── 5- interview/
     ├── README.md
-    └── interview/                     # Skill files
+    └── discovering-intent/            # Skill files
 ```
 
 ---

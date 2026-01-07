@@ -357,7 +357,7 @@ See `references/creation-workflow.md` for detailed steps.
 
 ```yaml
 ---
-name: processing-something          # gerund form, lowercase, hyphens, ≤64 chars
+name: processing-something          # prefer gerund form, lowercase, hyphens, ≤64 chars
                                     # Cannot contain "anthropic" or "claude"
 description: |                      # ≤1024 chars (≤200 for claude.ai)
   [What] Capability statement (third-person).
@@ -383,7 +383,7 @@ Before delivering a skill, verify:
 - [ ] User was NOT asked for domain knowledge
 
 ### Frontmatter
-- [ ] `name`: gerund form, lowercase, hyphens, ≤64 chars, matches directory
+- [ ] `name`: prefer gerund form, lowercase, hyphens, ≤64 chars, matches directory
 - [ ] `name`: Does NOT contain "anthropic" or "claude"
 - [ ] `description`: [What]+[When], ≤1024 chars (≤200 for claude.ai), third-person
 - [ ] `allowed-tools`: Set if restricted (CLI only—ignored on other platforms)

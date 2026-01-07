@@ -1,4 +1,4 @@
-# Interview Skill
+# Discovering Intent Skill
 
 Prevent building the wrong thing by discovering user intent before taking action.
 
@@ -15,15 +15,18 @@ This skill conducts discovery conversations that uncover the **WHY** behind the 
 
 ## Usage
 
-```
-/interview
-```
-
-Or trigger naturally when:
+Trigger naturally when:
 - Requests are ambiguous or complex
 - Recommendations are needed
 - Brainstorming is requested
 - High-stakes work where mistakes are costly
+
+Example phrases:
+```
+"Help me think through..."
+"What should I use for..."
+"Let's clarify requirements..."
+```
 
 ## The WHY + WHAT Model
 
@@ -86,9 +89,8 @@ Ready to proceed?
 ## Structure
 
 ```
-interview/
+discovering-intent/
 ├── SKILL.md                         # Main skill definition
-├── README.md                        # This file
 └── references/
     ├── question-patterns.md         # Techniques for discovering WHY
     ├── anti-patterns.md             # Common mistakes to avoid

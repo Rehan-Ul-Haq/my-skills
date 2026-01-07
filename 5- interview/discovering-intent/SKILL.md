@@ -1,10 +1,10 @@
 ---
-name: interview
+name: discovering-intent
 description: |
-  This skill conducts discovery conversations to understand user intent and agree on approach before taking action. It should be used when the user explicitly calls /interview, asks for recommendations, needs brainstorming, wants to clarify, or when the request could be misunderstood. Prevents building the wrong thing by uncovering WHY behind WHAT.
+  Conducts discovery conversations to understand user intent and agree on approach before taking action. Use when users ask for recommendations, need brainstorming, want to clarify requirements, or when requests could be misunderstood. Prevents building the wrong thing by uncovering WHY behind WHAT.
 ---
 
-# Interview Skill
+# Discovering Intent Skill
 
 Prevent building the wrong thing. Discover user's intent (WHY), validate assumptions, and agree on approach (WHAT) before taking action.
 
@@ -60,7 +60,7 @@ Informed WHAT → Agree on Both → Proceed
 
 | Trigger | Example |
 |---------|---------|
-| Explicit invocation | `/interview`, "let's clarify" |
+| Clarification requested | "Let's clarify", "Help me think through this" |
 | Request could be misunderstood | Ambiguous, complex, or multi-part requests |
 | Recommendations needed | "What should I use for..." |
 | Brainstorming | "Help me think through..." |
